@@ -1,0 +1,167 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="16dp">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layoutBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:elevation="8dp">
+
+            <!-- ______________________Account Name_____________________-->
+            <TextView
+                android:id="@+id/textViewAEAAccountNameLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:text="Account Name :" />
+
+            <EditText
+                android:id="@+id/editViewAEAAccountName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEAAccountNameLabel"
+                android:hint="account name"
+                android:singleLine="true"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/primary_text" />
+
+            <!-- ______________________Description_____________________-->
+            <TextView
+                android:id="@+id/textViewAEADescriptionLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editViewAEAAccountName"
+                android:layout_marginTop="8dp"
+                android:gravity="center|left"
+                android:text="Description :" />
+
+            <AutoCompleteTextView
+                android:id="@+id/textViewAEADescriptionAutoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEADescriptionLabel"
+                android:hint="description"
+                android:singleLine="true"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/primary_text" />
+
+
+            <!-- ______________________Currency_____________________-->
+            <TextView
+                android:id="@+id/textViewAEACurrencyLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewAEADescriptionAutoComplete"
+                android:layout_marginTop="8dp"
+                android:text="Currency :" />
+
+            <Spinner
+                android:id="@+id/spinnerAEACurrency"
+                android:layout_width="170dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEADescriptionAutoComplete"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toRightOf="@id/textViewAEACurrencyLabel"
+                android:popupBackground="@color/windowBackground" />
+
+
+            <!-- ______________________Status_____________________-->
+            <TextView
+                android:id="@+id/textViewAEAStatusLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinnerAEACurrency"
+                android:layout_marginTop="8dp"
+                android:text="Status :" />
+
+            <Spinner
+                android:id="@+id/spinnerAEAStatus"
+                android:layout_width="170dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/spinnerAEACurrency"
+                android:layout_marginLeft="36dp"
+                android:layout_toRightOf="@id/textViewAEAStatusLabel"
+                android:popupBackground="@color/windowBackground" />
+
+            <!-- ______________________Members_____________________-->
+            <TextView
+                android:id="@+id/textViewAEAMembersLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinnerAEAStatus"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Members:" />
+
+            <GridLayout
+                android:id="@+id/gridLayoutAEAMember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewAEAMembersLabel"></GridLayout>
+
+            <TextView
+                android:id="@+id/textViewAEACheckAll"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_below="@id/gridLayoutAEAMember"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ripple_accent"
+                android:clickable="true"
+                android:gravity="center|center_vertical"
+                android:text="Check All"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewAEACheckAll"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp">
+
+                <ImageButton
+                    android:id="@+id/imgAEABtnOk"
+                    android:layout_width="50dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/ic_ok"
+                    android:scaleType="fitCenter" />
+
+
+                <ImageButton
+                    android:id="@+id/imgAEABtnCancel"
+                    android:layout_width="50dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/ic_cancel"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

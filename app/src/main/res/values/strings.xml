@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">SplitExpense</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="landing_page_main_header">Manage your Group Expense</string>
+    <string name="landing_page_sub_header">fast and easy</string>
+
+    <string name="title_activity_activity_authentication">Split Expense</string>
+    <string name="title_activity_add_event">Add Event</string>
+    <string name="title_activity_add_account">Add Account</string>
+    <string name="title_activity_all_events">All Events</string>
+    <string name="title_activity_all_members">All Members</string>
+    <string name="title_activity_add_person">Add Person</string>
+    <string name="title_activity_payout">Pay Out</string>
+
+    <!-- login & registration activity strings-->
+    <string name="hint_username">user name</string>
+    <string name="hint_password">password</string>
+    <string name="hint_confirm_password">confirm password</string>
+    <string name="hint_answer">answer</string>
+    <string name="login_button">login</string>
+    <string name="signup_button">Sign Up</string>
+    <string name="clear_button">clear</string>
+    <string name="remember_me_chkbox">Remember Me</string>
+    <string name="forgot_password_id">Forgot your password?</string>
+    <string name="security_question">Where were you new year\'s 2000</string>
+    <string name="no_account_exist">Oops... no account exist. Create an account to begin with</string>
+
+    <!-- All Account activity strings-->
+    <string name="account_members_label">Members:</string>
+    <string name="account_description_label">Description:</string>
+    <string name="account_created_on_label">Created on:</string>
+    <string name="account_no_of_expenses_label">No of expenses:</string>
+    <string name="account_total_spend_label">Total spend:</string>
+    <string name="account_expense_status_label">Expense status:</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_add_account">add account</string>
+    <string name="menu_members">members</string>
+    <string name="menu_report">report</string>
+
+
+    <string-array name="existingAccounts">
+        <item>Feb 2015</item>
+        <item>March 2015</item>
+        <item>April 2015</item>
+        <item>May 2015</item>
+        <item>August 2015</item>
+    </string-array>
+
+    <string-array name="accountStatus">
+        <item>New</item>
+        <item>Active</item>
+        <item>Pending</item>
+        <item>Settled</item>
+    </string-array>
+
+    <string-array name="userTemp">
+        <item>vijayan</item>
+        <item>senthil</item>
+        <item>amitesh</item>
+    </string-array>
+
+    <string-array name="membersTemp">
+        <item>Vijayan</item>
+        <item>Senthil</item>
+        <item>Amitesh</item>
+        <item>Vijay Sridhar</item>
+        <item>Venkat</item>
+        <item>Shanmugam</item>
+        <item>Shanmuga Vadivel</item>
+        <item>Vinodh</item>
+        <item>Vijay</item>
+        <item>princy</item>
+        <item>bobbiemol</item>
+        <item>jagan</item>
+        <item>vimal</item>
+    </string-array>
+
+    <string-array name="currencyList">
+        <item>US Dollar</item>
+        <item>Canadian Dollar</item>
+        <item>British Pound</item>
+        <item>Indian Rupee</item>
+        <item>Euro</item>
+        <item>Australian Dollar</item>
+    </string-array>
+
+    <string-array name="accountDescriptionAutoList">
+        <item>Office Eating Out Account</item>
+        <item>Personal Lend Account</item>
+        <item>Monthly Room Expense Account</item>
+        <item>Weekend Party Account </item>
+    </string-array>
+
+    <string-array name="chooseCategory">
+        <item>Auto</item>
+        <item>Transport</item>
+        <item>Eating Out</item>
+        <item>Entertainment</item>
+        <item>Gift</item>
+        <item>Groceries</item>
+        <item>Utilities Bill</item>
+        <item>Internet</item>
+        <item>Medical</item>
+        <item>Rent</item>
+        <item>Home Maintenance</item>
+        <item>miscellaneous/Others</item>
+    </string-array>
+    <string name="title_activity_forgot_credential">ForgotCredentialActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+
+</resources>

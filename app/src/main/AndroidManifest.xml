@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bobcode.splitexpense">
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:label="@string/app_name"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.AuthenticationViewPageFragementActivity"
+            android:label="@string/title_activity_activity_authentication">
+
+        </activity>
+        <activity
+            android:name=".activities.AllAccountsActivity"
+            android:label="Split Expense"
+            android:launchMode="singleTask">
+
+        </activity>
+        <activity
+            android:name=".activities.AddOREditEventActivity"
+            android:label="@string/title_activity_add_event">
+
+        </activity>
+        <activity
+            android:name=".activities.AddOREditAccountActivity"
+            android:label="@string/title_activity_add_account"
+            android:launchMode="singleTask">
+
+        </activity>
+        <activity
+            android:name=".activities.AllEventsActivity"
+            android:label="@string/title_activity_all_events">
+
+        </activity>
+        <activity
+            android:name=".activities.AllMembersActivity"
+            android:label="@string/title_activity_all_members">
+
+        </activity>
+        <activity
+            android:name=".activities.AddOREditMemberActivity"
+            android:label="@string/title_activity_add_person">
+
+        </activity>
+        <activity
+            android:name=".activities.PayoutActivity"
+            android:label="@string/title_activity_payout">
+
+        </activity>
+        <activity
+            android:name=".activities.ForgotCredentialActivity"
+            android:label="@string/title_activity_forgot_credential">
+
+        </activity>
+    </application>
+
+</manifest>

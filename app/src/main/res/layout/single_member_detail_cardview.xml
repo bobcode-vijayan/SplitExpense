@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:elevation="18dp"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/windowBackground">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutAllMembers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgViewMemberPhoto"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_image_holder" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtViewMembersNameLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
+                    android:gravity="center|right"
+                    android:text="Name:" />
+
+                <TextView
+                    android:id="@+id/editTextMemberName"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/txtViewMembersNameLabel"
+                    android:gravity="center"
+                    android:text="Vijayan Anjalees" />
+
+                <TextView
+                    android:id="@+id/txtViewMembersDisplayNameLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/editTextMemberName"
+                    android:gravity="center|right"
+                    android:text="Display Name:" />
+
+                <TextView
+                    android:id="@+id/editTextMemberDisplayName"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/editTextMemberName"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/txtViewMembersDisplayNameLabel"
+                    android:gravity="center"
+                    android:text="Vijayan" />
+
+                <TextView
+                    android:id="@+id/txtViewMembersCommentsLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/editTextMemberDisplayName"
+                    android:gravity="center|right"
+                    android:text="Comments:" />
+
+                <TextView
+                    android:id="@+id/editTextMemberComments"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/editTextMemberDisplayName"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/txtViewMembersCommentsLabel"
+                    android:gravity="center"
+                    android:text="friend" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayoutAllMembers"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/imgDeleteMember"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/ic_delete_red" />
+
+            <ImageView
+                android:id="@+id/imgEditMemberDetail"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_edit_account_details_red" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

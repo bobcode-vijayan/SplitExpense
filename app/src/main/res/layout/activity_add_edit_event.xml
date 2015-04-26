@@ -1,0 +1,262 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="16dp">
+
+        <RelativeLayout
+            android:id="@+id/addEventMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+
+
+            <!-- _______________________ Account Name ___________________________-->
+            <TextView
+                android:id="@+id/textViewForgotCredUseName"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="92dp"
+                android:layout_height="48dp"
+                android:gravity="center|left"
+                android:paddingRight="8dp"
+                android:text="Account Name :" />
+
+            <Spinner
+                android:id="@+id/spinnerForgotCredUserName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_toRightOf="@id/textViewForgotCredUseName"
+                android:popupBackground="@color/windowBackground" />
+
+
+            <!-- _______________________ Event Date ___________________________-->
+            <TextView
+                android:id="@+id/textViewAEEventDateLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="92dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewForgotCredUseName"
+                android:layout_marginTop="4dp"
+                android:gravity="center|left"
+                android:text="Event Date :" />
+
+            <EditText
+                android:id="@+id/editTxtAEEventDate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/spinnerForgotCredUserName"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/textViewAEEventDateLabel"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_add_date"
+                android:drawablePadding="8dp"
+                android:editable="false"
+                android:hint="March 28 2015"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/primary_text" />
+            <!-- _______________________ Event Date ___________________________-->
+
+            <!-- _______________________ Description ___________________________-->
+            <TextView
+                android:id="@+id/textViewAEEDescriptionLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="92dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEEventDateLabel"
+                android:gravity="center|left"
+                android:text="Description :" />
+
+            <EditText
+                android:id="@+id/textViewAEEDescription"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEEventDateLabel"
+                android:layout_toRightOf="@id/textViewAEEDescriptionLabel"
+                android:hint="description"
+                android:maxLines="2"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/primary_text" />
+            <!-- _______________________ Description ___________________________-->
+
+
+            <!-- _______________________ Category ___________________________-->
+            <TextView
+                android:id="@+id/textViewAEECategoryLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="92dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEEDescription"
+                android:layout_marginTop="4dp"
+                android:gravity="center|left"
+                android:text="Category :" />
+
+            <EditText
+                android:id="@+id/editTxtAEEChooseCategory"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEEDescription"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/textViewAEECategoryLabel"
+                android:clickable="true"
+                android:drawableLeft="@drawable/ic_choose_category"
+                android:drawablePadding="8dp"
+                android:editable="false"
+                android:hint="choose category"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/primary_text" />
+
+            <!-- ______________________Who Paid?_____________________-->
+            <TextView
+                android:id="@+id/editTxtAEEWhoPaidLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="92dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/textViewAEECategoryLabel"
+                android:layout_marginTop="4dp"
+                android:gravity="center|left"
+                android:paddingBottom="8dp"
+                android:text="Who Paid? :" />
+
+            <Spinner
+                android:id="@+id/spinnerAEEWhoPaid"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/editTxtAEEChooseCategory"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/editTxtAEEWhoPaidLabel"
+                android:gravity="bottom"
+                android:popupBackground="@color/windowBackground" />
+
+
+            <!-- ______________________Amount_____________________-->
+            <LinearLayout
+                android:id="@+id/linearLayoutAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTxtAEEWhoPaidLabel">
+
+                <TextView
+                    android:id="@+id/textViewAEEAmountLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="92dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/editTxtAEEWhoPaidLabel"
+                    android:gravity="center|left"
+                    android:paddingBottom="4dp"
+                    android:text="Amount :" />
+
+                <ImageView
+                    android:id="@+id/currencyImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_below="@id/editTxtAEEWhoPaidLabel"
+                    android:layout_toRightOf="@id/textViewAEEAmountLabel"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_currency_dollar" />
+
+                <EditText
+                    android:id="@+id/editTxtAEEAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/spinnerAEEWhoPaid"
+                    android:layout_marginTop="4dp"
+                    android:layout_toRightOf="@id/currencyImage"
+                    android:hint="amount"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="@color/primary_text" />
+            </LinearLayout>
+            <!-- ______________________For Whom?_____________________-->
+            <TextView
+                android:id="@+id/textViewAEEForWhomLabel"
+                style="@style/textViewHeaderPrimaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayoutAmount"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:text="For Whom?" />
+
+
+            <GridLayout
+                android:id="@+id/gridLayoutAEEMember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textViewAEEForWhomLabel"
+                android:columnCount="2"
+                android:rowCount="6"></GridLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layoutTextLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/gridLayoutAEEMember"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewAEECheckAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/ripple_accent"
+                    android:clickable="true"
+                    android:gravity="center|center_vertical"
+                    android:text="Check All"
+                    android:textColor="@color/primary_text"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewAEEUnEvenSplit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:background="@drawable/ripple_accent"
+                    android:clickable="true"
+                    android:gravity="center|center_vertical"
+                    android:text="Un-Even Split"
+                    android:textColor="@color/primary_text"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layoutTextLink"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp">
+
+                <ImageButton
+                    android:id="@+id/imgAEABtnOk"
+                    android:layout_width="50dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/ic_ok"
+                    android:scaleType="fitCenter" />
+
+                <ImageButton
+                    android:id="@+id/imgAEABtnCancel"
+                    android:layout_width="50dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/ic_cancel"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
+

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:elevation="18dp"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/windowBackground">
+
+
+        <!-- ______________________Event Date_____________________-->
+        <TextView
+            android:id="@+id/txtViewAEEVentDateLabel"
+            style="@style/textViewHeaderPrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Event Date :" />
+
+        <TextView
+            android:id="@+id/txtViewAEEventDate"
+            style="@style/textViewHeaderPrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/txtViewAEEVentDateLabel"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:text="March 10 2015" />
+
+        <!-- ______________________Description_____________________-->
+        <TextView
+            android:id="@+id/txtViewAEDescriptionLabel"
+            style="@style/textViewHeaderPrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtViewAEEVentDateLabel"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Description :" />
+
+        <TextView
+            android:id="@+id/txtViewAEDescription"
+            style="@style/textViewHeaderPrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtViewAEDescriptionLabel"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="2dp"
+            android:text="Shop &amp; Shop" />
+
+        <!-- ______________________Category_____________________-->
+        <LinearLayout
+            android:id="@+id/parentLinearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtViewAEDescription"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtViewAECategoryLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category :" />
+
+                <TextView
+                    android:id="@+id/txtViewAECategory"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Utilities Bill" />
+            </LinearLayout>
+
+            <!-- ______________________Who Paid?_____________________-->
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtViewAEWhoPaidLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Who Paid?" />
+
+                <TextView
+                    android:id="@+id/txtViewAEWhoPaid"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="2dp"
+                    android:text="Vijayan" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/parentLinearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/parentLinearLayout1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <!-- ______________________Amount_____________________-->
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtViewAEAmountLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount :" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/aeCurrencyImage"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp" />
+
+                    <TextView
+                        android:id="@+id/txtViewAEAmount"
+                        style="@style/textViewHeaderPrimaryText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="210" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ______________________Created On_____________________-->
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtViewAECreatedOnLabel"
+                    style="@style/textViewHeaderPrimaryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="Created On :" />
+
+                <TextView
+                    android:id="@+id/txtViewAECreatedOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="March 10 2015"
+                    style="@style/textViewHeaderPrimaryText" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ______________________For Whom?_____________________-->
+        <TextView
+            android:id="@+id/txtViewAEForWhomLabel"
+            style="@style/textViewHeaderPrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/parentLinearLayout2"
+            android:text="For Whom?" />
+
+        <TextView
+            android:id="@+id/txtViewAEForWhom"
+            style="@style/textViewHeaderPrimaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/txtViewAEForWhomLabel"
+            android:layout_below="@id/parentLinearLayout2"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Vijayan, Senthil, Amitesh, Arun" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtViewAEForWhom"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp">
+
+            <ImageView
+                android:id="@+id/imgDeleteEvent"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/ic_delete_red" />
+
+            <ImageView
+                android:id="@+id/imgEditEventDetail"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_edit_account_details_red" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

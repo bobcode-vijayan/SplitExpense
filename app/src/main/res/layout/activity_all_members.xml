@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEFF9"
+    tools:context="com.bobcode.splitexpense.activities.AllMembersActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardListForAllMembers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="60dp" />
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fabtnAddMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:elevation="8dp"
+        android:src="@drawable/ic_add"
+        android:stateListAnimator="@anim/button_elevation"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorRipple="@color/primary" />
+
+    <TextView
+        android:id="@+id/textViewNoMemberExists"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Oops... no members exist. Add a member to begin with"
+        android:textColor="@color/primary_text"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
+
+</RelativeLayout>
