@@ -4,6 +4,7 @@ package com.bobcode.splitexpense.models;
  * Created by vijayananjalees on 4/21/15.
  */
 public class EventSummaryModel {
+    public String eventID;
     public String eventDate;
     public String description;
     public String category;
@@ -14,13 +15,14 @@ public class EventSummaryModel {
 
     public String currency;
 
-    public EventSummaryModel(String eventDate,
+    public EventSummaryModel(String eventID, String eventDate,
                              String description,
                              String category,
                              String whoPaid,
                              String amount,
                              String forWhom,
                              String createdOn, String currency) {
+        this.eventID = eventID;
         this.eventDate = eventDate;
         this.description = description;
         this.category = category;

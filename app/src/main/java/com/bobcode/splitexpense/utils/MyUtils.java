@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.activities.AddOREditAccountActivity;
 import com.bobcode.splitexpense.activities.AllMembersActivity;
+import com.bobcode.splitexpense.activities.AuthenticationViewPageFragementActivity;
 import com.bobcode.splitexpense.constants.Constants;
 
 /**
@@ -61,7 +62,12 @@ public final class MyUtils extends Application {
                 break;
 
             case R.id.action_logout:
-                MyUtils.showToast(context, "Logout is pressed");
+                //MyUtils.showToast(context, "Logout is pressed");
+
+                MySharedPrefs mySharedPrefs = new MySharedPrefs(context.getApplicationContext());
+                mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_REMEMBER_ME, "false");
+                context.startActivity(new Intent(context.getApplicationContext(), AuthenticationViewPageFragementActivity.class));
+
                 break;
 
             case R.id.action_add_account:

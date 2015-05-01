@@ -20,7 +20,6 @@ import com.bobcode.splitexpense.activities.ForgotCredentialActivity;
 import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.utils.MySharedPrefs;
 import com.bobcode.splitexpense.utils.MyUtils;
-
 /**
  * Created by vijayananjalees on 4/2/15.
  */
@@ -117,6 +116,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
                 Intent intentForgotCredential = new Intent(getActivity(), ForgotCredentialActivity.class);
                 startActivity(intentForgotCredential);
+                MyUtils.myPendingTransitionRightInLeftOut(getActivity());
 //--------------------------- pending -----------------------------------------------------//
 
                 break;

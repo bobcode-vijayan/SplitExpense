@@ -74,11 +74,10 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         int id = item.getItemId();
 
         switch (id) {
-
             case android.R.id.home:
                 super.onBackPressed();
+                MyUtils.myPendingTransitionLeftInRightOut(this);
                 break;
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -108,7 +107,6 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
                             callBackPressed();
                         }
                     }, 1000);
-
 //--------------------------- pending -----------------------------------------------------//
                 }
                 break;
@@ -117,5 +115,14 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
 
     public void callBackPressed() {
         super.onBackPressed();
+
+        MyUtils.myPendingTransitionLeftInRightOut(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        MyUtils.myPendingTransitionLeftInRightOut(this);
     }
 }

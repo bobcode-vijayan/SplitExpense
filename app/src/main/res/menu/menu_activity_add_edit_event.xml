@@ -12,19 +12,19 @@
 
     <item
         android:id="@+id/action_help"
-        android:title="Help"
+        android:title="@string/action_help"
         android:orderInCategory="200"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_logout"
-        android:title="Logout"
+        android:title="@string/action_logout"
         android:orderInCategory="300"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_tick"
-        android:title="add event"
+        android:title="@string/action_tick"
         android:orderInCategory="400"
         android:icon="@drawable/ic_action_tick"
         app:showAsAction="always" />

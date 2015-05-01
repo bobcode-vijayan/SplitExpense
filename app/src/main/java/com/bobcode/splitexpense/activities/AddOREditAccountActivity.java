@@ -65,7 +65,7 @@ public class AddOREditAccountActivity extends ActionBarActivity implements View.
 
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.drawable.ic_menu_add_edit_account);
+        //toolbar.setLogo(R.drawable.ic_menu_add_edit_account);
 
         //Account Name
         editViewAEAAccountName = (EditText) findViewById(R.id.editViewAEAAccountName);
@@ -277,6 +277,4 @@ public class AddOREditAccountActivity extends ActionBarActivity implements View.
 
         MyUtils.myPendingTransitionLeftInRightOut(this);
     }
-
-
 }

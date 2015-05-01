@@ -70,7 +70,7 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
 
         //Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.drawable.ic_menu_add_edit_event);
+        //toolbar.setLogo(R.drawable.ic_menu_add_edit_event);
 
         //Now is is taking a static data
         //later this data should come from database table "account profile"

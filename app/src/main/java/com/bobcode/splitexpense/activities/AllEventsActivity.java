@@ -19,16 +19,21 @@ import com.bobcode.splitexpense.models.EventSummaryModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AllEventsActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
+    private RecyclerView recyclerViewAllEvents;
+
+    private List<EventSummaryModel> eventSummaryModelList;
+
     private TextView textViewNoEventExists;
 
     private FloatingActionButton fabtnAddEvent;
-
-    private RecyclerView recyclerViewAllEvents;
 
     private String accountName;
     private String accountCurrency;
@@ -81,16 +86,24 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
         boolean isEventExits = true;
         if (isEventExits) {
             //Data
-            EventSummaryModel event1 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event2 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event3 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event4 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event5 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event6 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event7 = new EventSummaryModel("Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event1 = new EventSummaryModel("id_1","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event2 = new EventSummaryModel("id_2","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event3 = new EventSummaryModel("id_3","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event4 = new EventSummaryModel("id_4","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event5 = new EventSummaryModel("id_5","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event6 = new EventSummaryModel("id_6","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event7 = new EventSummaryModel("id_7","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
 
-            EventSummaryModel[] events = {event1, event2, event3, event4, event5, event6, event7};
-            EventSummaryAdapter eventSummaryAdapter = new EventSummaryAdapter(this, events);
+            eventSummaryModelList = new ArrayList<>();
+            eventSummaryModelList.add(event1);
+            eventSummaryModelList.add(event2);
+            eventSummaryModelList.add(event3);
+            eventSummaryModelList.add(event4);
+            eventSummaryModelList.add(event5);
+            eventSummaryModelList.add(event6);
+            eventSummaryModelList.add(event7);
+
+            EventSummaryAdapter eventSummaryAdapter = new EventSummaryAdapter(this, (ArrayList) eventSummaryModelList);
             recyclerViewAllEvents.setAdapter(eventSummaryAdapter);
         } else {
             textViewNoEventExists.setVisibility(View.VISIBLE);

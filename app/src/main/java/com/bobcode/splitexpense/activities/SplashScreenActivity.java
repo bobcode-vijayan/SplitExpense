@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bobcode.splitexpense.R;
+import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.helpers.DateAndTimeHelper;
 import com.bobcode.splitexpense.others.HideStatusAndNavigationBar;
+import com.bobcode.splitexpense.utils.MySharedPrefs;
 import com.melnykov.fab.FloatingActionButton;
 
 public class SplashScreenActivity extends ActionBarActivity implements View.OnClickListener {
@@ -25,7 +27,6 @@ public class SplashScreenActivity extends ActionBarActivity implements View.OnCl
     private Handler handler = new Handler();
 
     private boolean isActivityAuthenticationStarted = false;
-
 
     //This is to update the time on real time
     private final BroadcastReceiver intentReceiver = new BroadcastReceiver() {
@@ -67,16 +68,16 @@ public class SplashScreenActivity extends ActionBarActivity implements View.OnCl
 
         updateTime();
 
-//         new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (isActivityAuthenticationStarted == false){
-//                    startActivity(new Intent(SplashScreenActivity.this, AuthenticationViewPageFragementActivity.class));
-//
-//                    finish();
-//                }
-//            }
-//        }, Constants.SPLASH_TIME_OUT);
+         new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isActivityAuthenticationStarted == false){
+                    loadMainActivity();
+
+                    finish();
+                }
+            }
+        }, Constants.SPLASH_TIME_OUT);
 
     }
 
@@ -113,10 +114,23 @@ public class SplashScreenActivity extends ActionBarActivity implements View.OnCl
     public void onClick(View v) {
         isActivityAuthenticationStarted = true;
 
-        Intent intent = new Intent(this, AuthenticationViewPageFragementActivity.class);
-        startActivity(intent);
+        loadMainActivity();
 
         finish();
+    }
 
+    public void loadMainActivity(){
+        //Reading the shared preference of "Remember Me"
+        //if the user selected "Remember Me" when login,
+        //it will keep load the "All Account" activity instead of Login
+        //until user manually "Logout" from the menu
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(getApplicationContext());
+        String rememberMeFlag = mySharedPrefs.getDataFromSharePrefs(mySharedPrefs.PREFS_KEY_FOR_REMEMBER_ME);
+        rememberMeFlag = rememberMeFlag.trim().toLowerCase();
+        if ((rememberMeFlag != null) && (rememberMeFlag.equals("true"))) {
+            startActivity(new Intent(SplashScreenActivity.this, AllAccountsActivity.class));
+        }else{
+            startActivity(new Intent(SplashScreenActivity.this, AuthenticationViewPageFragementActivity.class));
+        }
     }
 }

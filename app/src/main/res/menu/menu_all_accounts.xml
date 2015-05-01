@@ -12,33 +12,33 @@
 
     <item
         android:id="@+id/action_help"
-        android:title="@string/menu_help"
+        android:title="@string/action_help"
         android:orderInCategory="200"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_logout"
-        android:title="@string/menu_logout"
+        android:title="@string/action_logout"
         android:orderInCategory="300"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_account"
-        android:title="@string/menu_add_account"
+        android:title="@string/action_add_account"
         android:orderInCategory="400"
         android:icon="@drawable/ic_menu_add_account"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_members"
-        android:title="@string/menu_members"
+        android:title="@string/action_members"
         android:orderInCategory="500"
         android:icon="@drawable/ic_menu_members"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_report"
-        android:title="@string/menu_report"
+        android:title="@string/action_report"
         android:orderInCategory="600"
         android:icon="@drawable/ic_menu_report"
         app:showAsAction="always" />

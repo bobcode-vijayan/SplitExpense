@@ -21,38 +21,50 @@ import com.bobcode.splitexpense.activities.AllEventsActivity;
 import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.models.AccountSummaryModel;
 import com.bobcode.splitexpense.utils.MyUtils;
+import com.melnykov.fab.FloatingActionButton;
+
+import java.util.ArrayList;
 
 /**
  * Created by vijayananjalees on 4/17/15.
  */
 public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAdapter.AccountSummaryAdapterViewHolder> {
 
-//    private List<AccountSummaryModel>  accountSummaryModelList;
-//    public AccountSummaryAdapter(List<AccountSummaryModel> accountSummaryModelList) {
-//        this.accountSummaryModelList = accountSummaryModelList;
-//    }
+    private ArrayList<AccountSummaryModel> accountSummaryModelList;
 
-    private AccountSummaryModel[] accountSummaryModels;
     private AccountSummaryModel accountSummaryModel;
 
     private Context context;
 
-    public AccountSummaryAdapter(Context contexts, AccountSummaryModel[] accountSummaryModels) {
-        this.context = contexts;
-        this.accountSummaryModels = accountSummaryModels;
+    private Activity activity;
+
+    public AccountSummaryAdapter(Context context, ArrayList<AccountSummaryModel> accountSummaryModelList) {
+        if (accountSummaryModelList == null) {
+            throw new IllegalArgumentException("Account summary model must not be null");
+        }
+        this.context = context;
+        this.activity = (Activity) context;
+        this.accountSummaryModelList = accountSummaryModelList;
     }
+
 
     @Override
     public int getItemCount() {
-        //return accountSummaryModelList.size();
-        return accountSummaryModels.length;
+        return this.accountSummaryModelList.size();
+    }
+
+    public void remove(int position) {
+        accountSummaryModelList.remove(position);
+        notifyItemRemoved(position);
+
+        //This is to ensure floating action button will not hide away
+        FloatingActionButton floatingActionButton = (FloatingActionButton)activity.findViewById(R.id.fabtnAllAccounts);
+        floatingActionButton.show();
     }
 
     @Override
-    public void onBindViewHolder(AccountSummaryAdapterViewHolder holder, int position) {
-        //AccountSummaryModel accountSummaryModel = accountSummaryModelList.get(position);
-
-        accountSummaryModel = accountSummaryModels[position];
+    public void onBindViewHolder(AccountSummaryAdapterViewHolder holder, final int position) {
+        accountSummaryModel = accountSummaryModelList.get(position);
         holder.accountName.setText(accountSummaryModel.accountName);
         holder.members.setText(accountSummaryModel.members);
         holder.description.setText(accountSummaryModel.description);
@@ -92,17 +104,18 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
         }
 
         holder.expenseStatus.setText(accountSummaryModel.status);
+
+        holder.itemView.setTag(accountSummaryModel);
     }
 
     @Override
     public AccountSummaryAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_account_detail_cardview, parent, false);
-        return new AccountSummaryAdapterViewHolder(itemView, context, accountSummaryModels);
+        return new AccountSummaryAdapterViewHolder(itemView, context, accountSummaryModelList);
     }
 
 
-    public static class AccountSummaryAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class AccountSummaryAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         protected TextView accountName;
         protected TextView members;
         protected TextView description;
@@ -121,13 +134,15 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
 
         private Context context;
 
-        private AccountSummaryModel[] accountSummaryModels;
+        private ArrayList<AccountSummaryModel> accountSummaryModelList;
+
         private AccountSummaryModel accountSummaryModel;
 
-        public AccountSummaryAdapterViewHolder(View itemView, Context context, AccountSummaryModel[] accountSummaryModels) {
+        public AccountSummaryAdapterViewHolder(View itemView, Context context, ArrayList<AccountSummaryModel> accountSummaryModelList) {
             super(itemView);
+
             this.context = context;
-            this.accountSummaryModels = accountSummaryModels;
+            this.accountSummaryModelList = accountSummaryModelList;
 
             accountName = (TextView) itemView.findViewById(R.id.allAccountAccountName);
             members = (TextView) itemView.findViewById(R.id.allAccountMembers);
@@ -158,7 +173,7 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
             String message = null;
 
             final int position = getPosition();
-            accountSummaryModel = accountSummaryModels[position];
+            accountSummaryModel = accountSummaryModelList.get(position);
             final String clickedAccountName = accountSummaryModel.accountName;
             final String clickedAccountDescription = accountSummaryModel.description;
             final String clickedAccountCurrency = accountSummaryModel.currency;
@@ -215,6 +230,7 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
                     // and delete the clicked account based on user input
 
                     deleteAccountDialog(clickedAccountName);
+
                     break;
 
                 default:
@@ -232,8 +248,9 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
                     break;
 
             }
-            if (message != null)
+            if (message != null) {
                 MyUtils.showToast(context.getApplicationContext(), "Account Name : " + clickedAccountName + message);
+            }
 
             MyUtils.myPendingTransitionRightInLeftOut((Activity) context);
         }
@@ -241,7 +258,9 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
         @Override
         public boolean onLongClick(View v) {
             int position = getPosition();
-            String clickedAccountName = accountSummaryModels[position].accountName;
+
+            accountSummaryModel = accountSummaryModelList.get(position);
+            String clickedAccountName = accountSummaryModel.accountName;
 
             deleteAccountDialog(clickedAccountName);
 
@@ -281,10 +300,11 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
             btnNegative.setTextColor(context.getResources().getColor(R.color.primary));
         }
 
-        public void deleteAccountFromTable(String clickedAccountName){
+        public void deleteAccountFromTable(String clickedAccountName) {
 //------------------------------- Pending -------------------------------------------------------
-            MyUtils.showToast(context, "account " + clickedAccountName +" deleted.......");
-        }
+            MyUtils.showToast(context, "account " + clickedAccountName + " deleted.......");
 
+            remove(getPosition());
+        }
     }
 }

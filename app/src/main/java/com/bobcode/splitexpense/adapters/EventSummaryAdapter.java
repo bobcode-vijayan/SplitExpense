@@ -18,44 +18,58 @@ import com.bobcode.splitexpense.activities.AddOREditEventActivity;
 import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.models.EventSummaryModel;
 import com.bobcode.splitexpense.utils.MyUtils;
+import com.melnykov.fab.FloatingActionButton;
+
+import java.util.ArrayList;
 
 /**
  * Created by vijayananjalees on 4/21/15.
  */
 public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapter.EventSummaryItemViewHolder> {
 
+    private ArrayList<EventSummaryModel> eventSummaryModelList;
 
-    private EventSummaryModel[] eventSummaryModels;
+    private EventSummaryModel eventSummaryModel;
 
     private Context context;
 
-    public EventSummaryAdapter(Context context, EventSummaryModel[] eventSummaryModels) {
+    private Activity activity;
+
+    public EventSummaryAdapter(Context context, ArrayList<EventSummaryModel> eventSummaryModelList) {
         this.context = context;
-        this.eventSummaryModels = eventSummaryModels;
+        this.activity = (Activity) context;
+        this.eventSummaryModelList = eventSummaryModelList;
     }
 
     @Override
     public int getItemCount() {
-        return eventSummaryModels.length;
+        return eventSummaryModelList.size();
     }
+
+    public void remove(int position) {
+        eventSummaryModelList.remove(position);
+        notifyItemRemoved(position);
+
+        //This is to ensure floating action button will not hide away
+        FloatingActionButton floatingActionButton = (FloatingActionButton)activity.findViewById(R.id.fabtnAddEvent);
+        floatingActionButton.show();
+    }
+
 
     @Override
     public void onBindViewHolder(EventSummaryItemViewHolder holder, int position) {
+        eventSummaryModel = eventSummaryModelList.get(position);
 
-        holder.txtViewAEEventDate.setText(eventSummaryModels[position].eventDate);
-
-        holder.txtViewAEDescription.setText(eventSummaryModels[position].description);
-
-        holder.txtViewAECategory.setText(eventSummaryModels[position].category);
-
-        holder.txtViewAEWhoPaid.setText(eventSummaryModels[position].whoPaid);
+        holder.txtViewAEEventDate.setText(eventSummaryModel.eventDate);
+        holder.txtViewAEDescription.setText(eventSummaryModel.description);
+        holder.txtViewAECategory.setText(eventSummaryModel.category);
+        holder.txtViewAEWhoPaid.setText(eventSummaryModel.whoPaid);
 
         //set the currency icon based on the particular account currency
         String imgName = null;
-        String currency = eventSummaryModels[position].currency;
+        String currency = eventSummaryModel.currency;
         if (currency != null) {
             currency = currency.toLowerCase();
-
             if (currency.equals("us dollar")) {
                 imgName = "ic_currency_dollar";
             } else if (currency.equals("canadian dollar")) {
@@ -71,22 +85,20 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
             }
             holder.aeCurrencyImage.setImageResource(context.getResources().getIdentifier(imgName, "drawable", context.getPackageName()));
         }
-        holder.txtViewAEAmount.setText(eventSummaryModels[position].amount);
-
-        holder.txtViewAEForWhom.setText(eventSummaryModels[position].forWhom);
-
-        holder.txtViewAECreatedOn.setText(eventSummaryModels[position].createdOn);
+        holder.txtViewAEAmount.setText(eventSummaryModel.amount);
+        holder.txtViewAEForWhom.setText(eventSummaryModel.forWhom);
+        holder.txtViewAECreatedOn.setText(eventSummaryModel.createdOn);
     }
 
 
     @Override
     public EventSummaryItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_event_details_cardview, parent, false);
-        return new EventSummaryItemViewHolder(itemView, context, eventSummaryModels);
+        return new EventSummaryItemViewHolder(itemView, context, eventSummaryModelList);
     }
 
 
-    public static class EventSummaryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class EventSummaryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         protected TextView txtViewAEEventDate;
         protected TextView txtViewAEDescription;
         protected TextView txtViewAECategory;
@@ -102,12 +114,15 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
 
         private Context context;
 
-        private EventSummaryModel[] eventSummaryModels;
+        private ArrayList<EventSummaryModel> eventSummaryModelList;
 
-        public EventSummaryItemViewHolder(View itemView, Context context, EventSummaryModel[] eventSummaryModels) {
+        private EventSummaryModel eventSummaryModel;
+
+        public EventSummaryItemViewHolder(View itemView, Context context, ArrayList<EventSummaryModel> eventSummaryModelList) {
             super(itemView);
+
             this.context = context;
-            this.eventSummaryModels = eventSummaryModels;
+            this.eventSummaryModelList = eventSummaryModelList;
 
             txtViewAEEventDate = (TextView) itemView.findViewById(R.id.txtViewAEEventDate);
             txtViewAEDescription = (TextView) itemView.findViewById(R.id.txtViewAEDescription);
@@ -116,7 +131,6 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
             txtViewAEAmount = (TextView) itemView.findViewById(R.id.txtViewAEAmount);
             txtViewAECreatedOn = (TextView) itemView.findViewById(R.id.txtViewAECreatedOn);
             txtViewAEForWhom = (TextView) itemView.findViewById(R.id.txtViewAEForWhom);
-
 
             aeCurrencyImage = (ImageView) itemView.findViewById(R.id.aeCurrencyImage);
 
@@ -132,9 +146,12 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
 
         @Override
         public void onClick(View v) {
+            final int position = getPosition();
+            eventSummaryModel = eventSummaryModelList.get(position);
+
             switch (v.getId()) {
                 case R.id.imgDeleteEvent:
-                    deleteEventDialog();
+                    deleteEventDialog(eventSummaryModel.eventID);
 
                     break;
 
@@ -143,21 +160,23 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
                     intentEditEventIcon.putExtra(Constants.EVENT_ACTION, "EDIT");
                     context.startActivity(intentEditEventIcon);
                     MyUtils.myPendingTransitionRightInLeftOut((Activity) context);
+
                     break;
             }
-
         }
 
         @Override
         public boolean onLongClick(View v) {
-            deleteEventDialog();
+            final int position = getPosition();
+            eventSummaryModel = eventSummaryModelList.get(position);
+            deleteEventDialog(eventSummaryModel.eventID);
 
             //return false -- will trigger the single click event as well
             //return true -- will not trigger the single click event
             return true;
         }
 
-        public void deleteEventDialog(){
+        public void deleteEventDialog(final String eventID){
             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AboutDialog);
             builder.setTitle("Delete the event? ");
             builder.setMessage("You'll lose the data and it may not be recovered");
@@ -166,7 +185,7 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    MyUtils.showToast(context, "Event deleted.......");
+                    deleteEventFromTable(eventID);
                 }
             });
 
@@ -186,6 +205,11 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
             btnNegative.setTextSize(16);
             btnNegative.setTextColor(context.getResources().getColor(R.color.primary));
         }
-    }
 
+        public void deleteEventFromTable(String eventID){
+            MyUtils.showToast(context, "Event " + eventID + " deleted.......");
+
+            remove(getPosition());
+        }
+    }
 }

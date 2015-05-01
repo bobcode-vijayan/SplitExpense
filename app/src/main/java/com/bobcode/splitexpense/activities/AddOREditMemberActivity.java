@@ -44,7 +44,6 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         imgViewMemberPhoto = (ImageView) findViewById(R.id.imgViewMemberPhoto);
 
         editTextMemberName = (EditText) findViewById(R.id.editTextMemberName);
@@ -123,5 +122,4 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
             MyUtils.showToast(this, "Oops..... You have not selected any contact");
         }
     }
-
 }

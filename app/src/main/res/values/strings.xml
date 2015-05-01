@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">SplitExpense</string>
     <string name="action_settings">Settings</string>
+    <string name="action_help">Help</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_tick">Ok</string>
+    <string name="action_add_account">add account</string>
+    <string name="action_members">members</string>
+    <string name="action_report">report</string>
+    <string name="action_all_accounts">all accounts</string>
 
     <string name="landing_page_main_header">Manage your Group Expense</string>
     <string name="landing_page_sub_header">fast and easy</string>
@@ -24,7 +31,7 @@
     <string name="remember_me_chkbox">Remember Me</string>
     <string name="forgot_password_id">Forgot your password?</string>
     <string name="security_question">Where were you new year\'s 2000</string>
-    <string name="no_account_exist">Oops... no account exist. Create an account to begin with</string>
+
 
     <!-- All Account activity strings-->
     <string name="account_members_label">Members:</string>
@@ -33,11 +40,8 @@
     <string name="account_no_of_expenses_label">No of expenses:</string>
     <string name="account_total_spend_label">Total spend:</string>
     <string name="account_expense_status_label">Expense status:</string>
-    <string name="menu_help">Help</string>
-    <string name="menu_logout">Logout</string>
-    <string name="menu_add_account">add account</string>
-    <string name="menu_members">members</string>
-    <string name="menu_report">report</string>
+    <string name="no_member_exist">Oops...... no member exists. Create a member before creating an account</string>
+    <string name="no_account_exist">Oops... no account exist. Create an account to begin with</string>
 
 
     <string-array name="existingAccounts">
@@ -107,8 +111,7 @@
         <item>Home Maintenance</item>
         <item>miscellaneous/Others</item>
     </string-array>
-    <string name="title_activity_forgot_credential">ForgotCredentialActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_forgot_credential">ForgotCredentialActivity</string>
 
 </resources>

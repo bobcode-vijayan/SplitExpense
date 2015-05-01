@@ -12,7 +12,7 @@
         android:id="@+id/action_all_accounts"
         android:orderInCategory="200"
         android:icon="@drawable/ic_action_all_account"
-        android:title="All Accounts"
+        android:title="@string/action_all_accounts"
         app:showAsAction="always" />
 
 </menu>

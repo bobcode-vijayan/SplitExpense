@@ -6,8 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
-    android:elevation="18dp"
     android:background="@color/windowBackground"
+    android:elevation="18dp"
+    card_view:cardElevation="5dp"
     card_view:cardCornerRadius="4dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -195,8 +196,7 @@
                     style="@style/textViewHeaderPrimaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="2323" />
+                    android:layout_marginTop="2dp" />
                 <!-- android:text="1019" -->
             </LinearLayout>
 

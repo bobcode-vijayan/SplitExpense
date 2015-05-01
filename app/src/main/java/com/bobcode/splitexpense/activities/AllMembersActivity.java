@@ -17,6 +17,9 @@ import com.bobcode.splitexpense.models.MemberDetailModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AllMembersActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -27,6 +30,8 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
     private TextView textViewNoMemberExists;
 
     private RecyclerView cardListForAllMembers;
+
+    private List<MemberDetailModel> memberDetailModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +77,16 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
             MemberDetailModel member4 = new MemberDetailModel("Shanmuga", "Shanmuga", "Friend");
             MemberDetailModel member5 = new MemberDetailModel("Shanmuga Vadivel", "Shanmuga Vadivel", "Friend");
             MemberDetailModel member6 = new MemberDetailModel("Vinod Dewangan", "Vinod", "Friend");
-            MemberDetailModel MemberDetailModels[] = {member1, member2, member3, member4, member5, member6};
 
-            MembersDetailsAdapter membersDetailsAdapter = new MembersDetailsAdapter(this, MemberDetailModels);
+            memberDetailModelList = new ArrayList<>();
+            memberDetailModelList.add(member1);
+            memberDetailModelList.add(member2);
+            memberDetailModelList.add(member3);
+            memberDetailModelList.add(member4);
+            memberDetailModelList.add(member5);
+            memberDetailModelList.add(member6);
+
+            MembersDetailsAdapter membersDetailsAdapter = new MembersDetailsAdapter(this, (ArrayList) memberDetailModelList);
             cardListForAllMembers.setAdapter(membersDetailsAdapter);
         } else {
             cardListForAllMembers.setVisibility(View.VISIBLE);

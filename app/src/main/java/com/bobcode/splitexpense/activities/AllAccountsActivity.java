@@ -18,6 +18,9 @@ import com.bobcode.splitexpense.models.AccountSummaryModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by vijayananjalees on 4/16/15.
  */
@@ -27,7 +30,7 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
 
     private RecyclerView recyclerViewAllAccounts;
 
-    //private List<AccountSummaryModel> accountSummaryModelList;
+    private List<AccountSummaryModel> accountSummaryModelList;
 
     private TextView textViewNoAccountExists;
 
@@ -73,7 +76,7 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
         //          update isMemberExits to true
         isMemberExists = true;
         if (isMemberExists == false) {
-            textViewNoAccountExists.setText("Oops...... no member exists. Create a member before creating an account");
+            textViewNoAccountExists.setText(R.string.no_member_exist);
             textViewNoAccountExists.setVisibility(View.VISIBLE);
         } else {
             //               validation - II
@@ -85,16 +88,25 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
             boolean isAccountExits = true;
             if (isAccountExits) {
                 //Data
+
                 AccountSummaryModel febAccount = new AccountSummaryModel("Feb 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmugam", "Feb Room monthly expense", "Sunday, Feb 01 2015", 109, 810.00f, "Settled", "US Dollar");
                 AccountSummaryModel marchAccount = new AccountSummaryModel("March 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "March Room monthly expense", "Monday, March 02 2015", 87, 620.00f, "Pending", "US Dollar");
                 AccountSummaryModel aprilAccount = new AccountSummaryModel("April 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "April Room monthly expense", "Tuesday, April 02 2015", 139, 1893.29f, "Active", "Indian Rupee");
                 AccountSummaryModel mayAccount = new AccountSummaryModel("May 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "May Room monthly expense", "Wednesday, May 02 2015", 10, 210.00f, "Active", "British Pound");
                 AccountSummaryModel AugustAccount = new AccountSummaryModel("August 2015", "Vijayan, Senthil, Amitesh", "August Room monthly expense", "Wednesday, August 02 2015", 10, 210.00f, "Active", "British Pound");
-                AccountSummaryModel accountSummaryModels[] = {febAccount, marchAccount, aprilAccount, mayAccount, AugustAccount};
 
-                AccountSummaryAdapter accountSummaryAdapter = new AccountSummaryAdapter(this, accountSummaryModels);
+                accountSummaryModelList = new ArrayList<>();
+                accountSummaryModelList.add(febAccount);
+                accountSummaryModelList.add(marchAccount);
+                accountSummaryModelList.add(aprilAccount);
+                accountSummaryModelList.add(mayAccount);
+                accountSummaryModelList.add(AugustAccount);
+
+                AccountSummaryAdapter accountSummaryAdapter = new AccountSummaryAdapter(this, (ArrayList) accountSummaryModelList);
+
                 recyclerViewAllAccounts.setAdapter(accountSummaryAdapter);
             } else {
+                textViewNoAccountExists.setText(R.string.no_account_exist);
                 textViewNoAccountExists.setVisibility(View.VISIBLE);
             }
         }
@@ -106,7 +118,6 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.fabtnAllAccounts:
                 if (isMemberExists == false) {
