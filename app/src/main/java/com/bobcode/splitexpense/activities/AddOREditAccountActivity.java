@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -209,29 +208,31 @@ public class AddOREditAccountActivity extends ActionBarActivity implements View.
 
             case R.id.imgAEABtnOk:
                 //this the tick(Green color) button to create/edit the account with the user input
-                MyUtils.showToast(this, "Account added. Oops... no its WIP.....");
 
                 String members[] = getResources().getStringArray(R.array.membersTemp);
                 List<String> selectedMembers = new ArrayList<String>();
                 for (int index = 0; index < members.length; index++) {
                     if (checkBox[index].isChecked()) {
-                        Log.d("vijayan", checkBox[index].getText().toString());
                         selectedMembers.add(checkBox[index].getText().toString());
                     }
                 }
                 //this is to close the add/edit account activity and will take the user to All Account activity
-                Intent intentOKAllAccount = new Intent(this, AllAccountsActivity.class);
-                startActivity(intentOKAllAccount);
+//                Intent intentOKAllAccount = new Intent(this, AllAccountsActivity.class);
+//                startActivity(intentOKAllAccount);
+//                MyUtils.myPendingTransitionLeftInRightOut(this);
 
-                MyUtils.myPendingTransitionLeftInRightOut(this);
+                callAllAccountActivity("ok");
+
                 break;
 
             case R.id.imgAEABtnCancel:
                 //this is to close the add/edit account activity and will take the user to All Account activity
-                Intent intentCancelAllAccount = new Intent(this, AllAccountsActivity.class);
-                startActivity(intentCancelAllAccount);
+//                Intent intentCancelAllAccount = new Intent(this, AllAccountsActivity.class);
+//                startActivity(intentCancelAllAccount);
+//                MyUtils.myPendingTransitionLeftInRightOut(this);
 
-                MyUtils.myPendingTransitionLeftInRightOut(this);
+                callAllAccountActivity("cancel");
+
                 break;
         }
 
@@ -250,25 +251,40 @@ public class AddOREditAccountActivity extends ActionBarActivity implements View.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id) {
             case android.R.id.home:
-                super.onBackPressed();
+                onBackPressed();
 
-                MyUtils.myPendingTransitionLeftInRightOut(this);
                 break;
 
             case R.id.action_tick:
                 //this to create/edit the account with the user input
                 //this will behave same as green color tick button
-                MyUtils.showToast(this, "tick icon has been clicked");
+                callAllAccountActivity("menu");
+
                 break;
 
             default:
+                //add account, add member, report, help & logout handled here
                 MyUtils.commonMenuActions(this, item);
+
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void callAllAccountActivity(String from){
+
+        if((toolbar.getTitle().toString().toLowerCase().trim().equals("add account")) && (!from.equals("cancel"))){
+            MyUtils.showToast(this, "Account added successfully. Oops... no its WIP.....");
+        }else if((toolbar.getTitle().toString().toLowerCase().trim().equals("edit account")) && (!from.equals("cancel"))){
+            MyUtils.showToast(this, "Account updated successfully. Oops... no its WIP.....");
+        }
+
+        Intent intentCancelAllAccount = new Intent(this, AllAccountsActivity.class);
+        startActivity(intentCancelAllAccount);
+        MyUtils.myPendingTransitionLeftInRightOut(this);
     }
 
     @Override

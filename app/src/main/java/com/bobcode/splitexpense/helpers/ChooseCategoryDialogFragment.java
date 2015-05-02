@@ -12,6 +12,8 @@ import android.widget.ListView;
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.constants.Constants;
 
+import java.util.Arrays;
+
 /**
  * Created by vijayananjalees on 4/20/15.
  */
@@ -35,8 +37,13 @@ public class ChooseCategoryDialogFragment extends DialogFragment {
         else {
             //read the last chosen category from the preference
             //and set the value to lastChosenCategory
-
-            lastChosenCategory = 0;
+            Bundle bundle = this.getArguments();
+            String currentCategory = bundle.getString(Constants.CATEGORY_TO_CHOOSE);
+            if (!currentCategory.equals("choose category")) {
+                lastChosenCategory = Arrays.asList(category).indexOf(currentCategory);
+            } else {
+                lastChosenCategory = 0;
+            }
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -60,7 +67,6 @@ public class ChooseCategoryDialogFragment extends DialogFragment {
                         //save the chosen category to preferences
                         //this will be used to populate the default selection in choose category
                         // with the last chosen category
-
                     }
                 })
 
@@ -94,6 +100,4 @@ public class ChooseCategoryDialogFragment extends DialogFragment {
         outState.putInt(Constants.LAST_CHOSEN_CATEGORY, lastChosenCategory);
         super.onSaveInstanceState(outState);
     }
-
-
 }

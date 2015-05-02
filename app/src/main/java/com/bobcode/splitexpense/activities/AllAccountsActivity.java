@@ -88,7 +88,6 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
             boolean isAccountExits = true;
             if (isAccountExits) {
                 //Data
-
                 AccountSummaryModel febAccount = new AccountSummaryModel("Feb 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmugam", "Feb Room monthly expense", "Sunday, Feb 01 2015", 109, 810.00f, "Settled", "US Dollar");
                 AccountSummaryModel marchAccount = new AccountSummaryModel("March 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "March Room monthly expense", "Monday, March 02 2015", 87, 620.00f, "Pending", "US Dollar");
                 AccountSummaryModel aprilAccount = new AccountSummaryModel("April 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "April Room monthly expense", "Tuesday, April 02 2015", 139, 1893.29f, "Active", "Indian Rupee");
@@ -159,13 +158,11 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
                 break;
 
             default:
-                //add account icon click handled here
-                //add member icon click handled here
+                //add account, add member, report, help & logout handled here
                 MyUtils.commonMenuActions(this, item);
 
                 break;
         }
-
         MyUtils.myPendingTransitionRightInLeftOut(this);
         return super.onOptionsItemSelected(item);
     }

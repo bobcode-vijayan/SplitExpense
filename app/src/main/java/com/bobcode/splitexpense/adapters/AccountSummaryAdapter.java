@@ -162,6 +162,7 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+
             imgAddEvent.setOnClickListener(this);
             imgAllEvents.setOnClickListener(this);
             imgEditAccountDetail.setOnClickListener(this);
@@ -183,7 +184,7 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
             switch (v.getId()) {
                 case R.id.imgAddEvent:
                     //First icon on the individual account detail
-                    message = "adding event";
+                    message = "Adding event to ";
 
                     Intent intentAddEventIcon = new Intent(context.getApplicationContext(), AddOREditEventActivity.class);
                     intentAddEventIcon.putExtra(Constants.EVENT_ACTION, "ADD");
@@ -197,7 +198,7 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
 
                 case R.id.imgAllEvents:
                     //Second icon on the individual account detail
-                    message = " : viewing all event";
+                    message = "Viewing all event of ";
 
                     Intent intentAllEventIcon = new Intent(context.getApplicationContext(), AllEventsActivity.class);
                     intentAllEventIcon.putExtra(Constants.ACCOUNT_NAME, clickedAccountName);
@@ -211,7 +212,7 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
                 case R.id.imgEditAccountDetail:
                     //third icon on the individual account
                     //click on edit account icon will take the user to edit the existing account detail
-                    message = " : editing existing account details";
+                    message = "Editing account details of ";
 
                     Intent intentEditAccountIcon = new Intent(context.getApplicationContext(), AddOREditAccountActivity.class);
                     intentEditAccountIcon.putExtra(Constants.ACCOUNT_ACTION, "EDIT");
@@ -235,21 +236,19 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
 
                 default:
                     //single press will take the user to All Event of the clicked account
-                    message = " : all events";
+                    message = "Viewing all event of ";
 
                     Intent intentAllEventSinglePress = new Intent(context.getApplicationContext(), AllEventsActivity.class);
                     intentAllEventSinglePress.putExtra(Constants.ACCOUNT_NAME, clickedAccountName);
                     intentAllEventSinglePress.putExtra(Constants.ACCOUNT_CURRENCY, clickedAccountCurrency);
                     intentAllEventSinglePress.putExtra(Constants.ACCOUNT_MEMBERS, clickedAccountMembers);
                     intentAllEventSinglePress.putExtra(Constants.ACCOUNT_STATUS, clickedAccountStatus);
-
                     context.startActivity(intentAllEventSinglePress);
 
                     break;
-
             }
             if (message != null) {
-                MyUtils.showToast(context.getApplicationContext(), "Account Name : " + clickedAccountName + message);
+                MyUtils.showToast(context.getApplicationContext(), message + clickedAccountName);
             }
 
             MyUtils.myPendingTransitionRightInLeftOut((Activity) context);

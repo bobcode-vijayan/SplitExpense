@@ -4,42 +4,37 @@
     tools:context="com.bobcode.splitexpense.activities.AllAccountsActivity">
 
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_help"
-        android:title="@string/action_help"
-        android:orderInCategory="200"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_logout"
-        android:title="@string/action_logout"
-        android:orderInCategory="300"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_add_account"
         android:title="@string/action_add_account"
-        android:orderInCategory="400"
+        android:orderInCategory="100"
         android:icon="@drawable/ic_menu_add_account"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_members"
         android:title="@string/action_members"
-        android:orderInCategory="500"
+        android:orderInCategory="200"
         android:icon="@drawable/ic_menu_members"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_report"
         android:title="@string/action_report"
-        android:orderInCategory="600"
+        android:orderInCategory="300"
         android:icon="@drawable/ic_menu_report"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:orderInCategory="400"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        android:orderInCategory="500"
+        app:showAsAction="never" />
+
+
 </menu>

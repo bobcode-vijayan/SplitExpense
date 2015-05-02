@@ -21,6 +21,7 @@ import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by vijayananjalees on 4/21/15.
@@ -29,16 +30,19 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
 
     private ArrayList<EventSummaryModel> eventSummaryModelList;
 
+    private HashMap<String, String> selectedAccountDetails;
+
     private EventSummaryModel eventSummaryModel;
 
     private Context context;
 
     private Activity activity;
 
-    public EventSummaryAdapter(Context context, ArrayList<EventSummaryModel> eventSummaryModelList) {
+    public EventSummaryAdapter(Context context, ArrayList<EventSummaryModel> eventSummaryModelList, HashMap<String, String> selectedAccountDetails) {
         this.context = context;
         this.activity = (Activity) context;
         this.eventSummaryModelList = eventSummaryModelList;
+        this.selectedAccountDetails = selectedAccountDetails;
     }
 
     @Override
@@ -90,13 +94,11 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
         holder.txtViewAECreatedOn.setText(eventSummaryModel.createdOn);
     }
 
-
     @Override
     public EventSummaryItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_event_details_cardview, parent, false);
         return new EventSummaryItemViewHolder(itemView, context, eventSummaryModelList);
     }
-
 
     public class EventSummaryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         protected TextView txtViewAEEventDate;
@@ -156,8 +158,26 @@ public class EventSummaryAdapter extends RecyclerView.Adapter<EventSummaryAdapte
                     break;
 
                 case R.id.imgEditEventDetail:
+                    String accountName = selectedAccountDetails.get(Constants.ACCOUNT_NAME);
+                    String accountCurrency = selectedAccountDetails.get(Constants.ACCOUNT_CURRENCY);
+                    String accountMembers = selectedAccountDetails.get(Constants.ACCOUNT_MEMBERS);
+
                     Intent intentEditEventIcon = new Intent(context.getApplicationContext(), AddOREditEventActivity.class);
                     intentEditEventIcon.putExtra(Constants.EVENT_ACTION, "EDIT");
+
+                    //Account level data
+                    intentEditEventIcon.putExtra(Constants.ACCOUNT_NAME, accountName);
+                    intentEditEventIcon.putExtra(Constants.ACCOUNT_CURRENCY, accountCurrency);
+                    intentEditEventIcon.putExtra(Constants.ACCOUNT_MEMBERS, accountMembers);
+
+                    //Event level data
+                    intentEditEventIcon.putExtra(Constants.EDIT_EVENT_DATE, eventSummaryModel.eventDate);
+                    intentEditEventIcon.putExtra(Constants.EDIT_EVENT_DESCRIPTION, eventSummaryModel.description);
+                    intentEditEventIcon.putExtra(Constants.EDIT_EVENT_CATEGORY, eventSummaryModel.category);
+                    intentEditEventIcon.putExtra(Constants.EDIT_EVENT_WHO_PAID, eventSummaryModel.whoPaid);
+                    intentEditEventIcon.putExtra(Constants.EDIT_EVENT_AMOUNT, eventSummaryModel.amount);
+                    intentEditEventIcon.putExtra(Constants.EDIT_EVENT_FOR_WHOM, eventSummaryModel.forWhom);
+
                     context.startActivity(intentEditEventIcon);
                     MyUtils.myPendingTransitionRightInLeftOut((Activity) context);
 

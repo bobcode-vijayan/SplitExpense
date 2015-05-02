@@ -55,7 +55,6 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         //fb btn for OK
         fabtnForgotPassword = (ImageButton) findViewById(R.id.fabtnForgotPassword);
         fabtnForgotPassword.setOnClickListener(this);
-
     }
 
 
@@ -72,14 +71,19 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id) {
             case android.R.id.home:
                 super.onBackPressed();
                 MyUtils.myPendingTransitionLeftInRightOut(this);
+
+                break;
+
+            default:
+                //add account, add member, report, help & logout handled here
+                MyUtils.commonMenuActions(this, item);
+
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

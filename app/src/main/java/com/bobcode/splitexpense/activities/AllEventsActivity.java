@@ -20,6 +20,7 @@ import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -40,6 +41,8 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
     private String accountMembers;
     private String accountStatus;
 
+    private HashMap<String, String> selectedAccountDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,12 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
         accountCurrency = getIntent().getStringExtra(Constants.ACCOUNT_CURRENCY);
         accountMembers = getIntent().getStringExtra(Constants.ACCOUNT_MEMBERS);
         accountStatus = getIntent().getStringExtra(Constants.ACCOUNT_STATUS);
+
+        selectedAccountDetails = new HashMap<>();
+        selectedAccountDetails.put(Constants.ACCOUNT_NAME, accountName);
+        selectedAccountDetails.put(Constants.ACCOUNT_CURRENCY, accountCurrency);
+        selectedAccountDetails.put(Constants.ACCOUNT_MEMBERS, accountMembers);
+
 
         //Retrieve the user clicked account name and set the name as toolbar title
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,13 +95,13 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
         boolean isEventExits = true;
         if (isEventExits) {
             //Data
-            EventSummaryModel event1 = new EventSummaryModel("id_1","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event2 = new EventSummaryModel("id_2","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event3 = new EventSummaryModel("id_3","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event4 = new EventSummaryModel("id_4","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event5 = new EventSummaryModel("id_5","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event6 = new EventSummaryModel("id_6","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
-            EventSummaryModel event7 = new EventSummaryModel("id_7","Month 01 2015", "Shop & Shop", "Grocery", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event1 = new EventSummaryModel("id_1","March 01 2015", "Shop & Shop", "Groceries", "Vijayan", "120", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event2 = new EventSummaryModel("id_2","March 02 2015", "Shop & Shop", "Auto", "Senthil", "130", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event3 = new EventSummaryModel("id_3","March 03 2015", "Shop & Shop", "Groceries", "Amitesh", "140", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event4 = new EventSummaryModel("id_4","March 04 2015", "Shop & Shop", "Gift", "Vijayan", "150", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event5 = new EventSummaryModel("id_5","March 05 2015", "Shop & Shop", "Groceries", "Senthil", "20", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event6 = new EventSummaryModel("id_6","March 06 2015", "Shop & Shop", "Internet", "Vijayan", "170", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
+            EventSummaryModel event7 = new EventSummaryModel("id_7","March 07 2015", "Shop & Shop", "Groceries", "Amitesh", "1800", "vijayan, senthil, amitesh", "Month 02 2015", accountCurrency);
 
             eventSummaryModelList = new ArrayList<>();
             eventSummaryModelList.add(event1);
@@ -103,7 +112,7 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
             eventSummaryModelList.add(event6);
             eventSummaryModelList.add(event7);
 
-            EventSummaryAdapter eventSummaryAdapter = new EventSummaryAdapter(this, (ArrayList) eventSummaryModelList);
+            EventSummaryAdapter eventSummaryAdapter = new EventSummaryAdapter(this, (ArrayList) eventSummaryModelList, selectedAccountDetails);
             recyclerViewAllEvents.setAdapter(eventSummaryAdapter);
         } else {
             textViewNoEventExists.setVisibility(View.VISIBLE);
@@ -141,7 +150,6 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id) {
             case android.R.id.home:
                 NavUtils.navigateUpTo(this, new Intent(this, AllAccountsActivity.class));
@@ -154,7 +162,10 @@ public class AllEventsActivity extends ActionBarActivity implements View.OnClick
                 MyUtils.myPendingTransitionRightInLeftOut(this);
                 break;
 
-            case R.id.action_settings:
+            default:
+                //add account, add member, report, help & logout handled here
+                MyUtils.commonMenuActions(this, item);
+
                 break;
         }
         return super.onOptionsItemSelected(item);

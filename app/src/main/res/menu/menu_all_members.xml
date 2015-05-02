@@ -2,17 +2,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bobcode.splitexpense.activities.AllMembersActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_all_accounts"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:icon="@drawable/ic_action_all_account"
         android:title="@string/action_all_accounts"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/action_logout"
+        android:orderInCategory="300"
+        app:showAsAction="never" />
 
 </menu>

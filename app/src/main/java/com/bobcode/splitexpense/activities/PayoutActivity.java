@@ -74,10 +74,12 @@ public class PayoutActivity extends ActionBarActivity {
                 MyUtils.myPendingTransitionLeftInRightOut(this);
                 break;
 
-            case R.id.action_settings:
+            default:
+                //add account, add member, report, help & logout handled here
+                MyUtils.commonMenuActions(this, item);
+
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -87,5 +89,4 @@ public class PayoutActivity extends ActionBarActivity {
 
         MyUtils.myPendingTransitionLeftInRightOut(this);
     }
-
 }

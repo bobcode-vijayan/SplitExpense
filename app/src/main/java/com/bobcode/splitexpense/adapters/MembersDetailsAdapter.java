@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bobcode.splitexpense.R;
+import com.bobcode.splitexpense.activities.AddOREditMemberActivity;
+import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.models.MemberDetailModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -121,6 +124,14 @@ public class MembersDetailsAdapter extends RecyclerView.Adapter<MembersDetailsAd
 
                 case R.id.imgEditMemberDetail:
                     MyUtils.showToast(context, "Edit Event Icon clicked");
+
+                    Intent intentEditMember = new Intent(context, AddOREditMemberActivity.class);
+                    intentEditMember.putExtra(Constants.MEMBER_ACTION, "Edit");
+                    intentEditMember.putExtra(Constants.MEMBER_NAME, memberDetailModelArrayList.get(position).name);
+                    intentEditMember.putExtra(Constants.MEMBER_DISPLAY_NAME, memberDetailModelArrayList.get(position).displayName);
+                    intentEditMember.putExtra(Constants.MEMBER_COMMENTS, memberDetailModelArrayList.get(position).comments);
+                    context.startActivity(intentEditMember);
+                    MyUtils.myPendingTransitionRightInLeftOut((Activity) context);
 
                     break;
             }

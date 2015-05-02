@@ -58,6 +58,10 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
 
     private CheckBox[] checkBox;
 
+    private String[] accountMembersList;
+
+    private String from;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +89,6 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
         //By default the current date will be populated
         //but if the user can able to change the date by clicking the date picker
         editTxtAEEventDate = (EditText) findViewById(R.id.editTxtAEEventDate);
-        editTxtAEEventDate.setText(DateAndTimeHelper.getRawCurrentDate());
         editTxtAEEventDate.setOnClickListener(this);
 
         //Event Description
@@ -112,80 +115,33 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
         if (eventAction != null) {
             eventAction = eventAction.toLowerCase();
 
-            if (eventAction.equals("add")) {
-                toolbar.setTitle("Add Event");
+            String accountName = getIntent().getStringExtra(Constants.ACCOUNT_NAME);
+            String accountCurrency = getIntent().getStringExtra(Constants.ACCOUNT_CURRENCY);
+            String accountMembers = getIntent().getStringExtra(Constants.ACCOUNT_MEMBERS);
 
-                String eventActionSource = getIntent().getStringExtra(Constants.ADD_EVENT_ACTION_SOURCE).trim();
-                if ((eventActionSource.equals("ACCOUNTDETAIL")) || (eventActionSource.equals("ALLEVENTSFAB"))) {
-                    //Reading data from the intent passed from Allt Account
-                    String accountName = getIntent().getStringExtra(Constants.ACCOUNT_NAME);
-                    String accountCurrency = getIntent().getStringExtra(Constants.ACCOUNT_CURRENCY);
-                    String accountMembers = getIntent().getStringExtra(Constants.ACCOUNT_MEMBERS);
+            //populate Account Name based on All Account Intent account name data
+            spinnerAEEAccountName.setSelection(Arrays.asList(existingAccounts).indexOf(accountName));
 
-                    //populate Account Name based on All Account Intent account name data
-                    spinnerAEEAccountName.setSelection(Arrays.asList(existingAccounts).indexOf(accountName));
+            //populate current symbol based on All Account Intent currency data
+            String imgName = null;
+            if (accountCurrency != null) {
+                accountCurrency = accountCurrency.toLowerCase();
 
-                    //populate current symbol based on All Account Intent currency data
-                    String imgName = null;
-                    if (accountCurrency != null) {
-                        accountCurrency = accountCurrency.toLowerCase();
-
-                        if (accountCurrency.equals("us dollar")) {
-                            imgName = "ic_currency_dollar";
-                        } else if (accountCurrency.equals("canadian dollar")) {
-                            imgName = "ic_currency_dollar";
-                        } else if (accountCurrency.equals("british pound")) {
-                            imgName = "ic_currency_pound";
-                        } else if (accountCurrency.equals("indian rupee")) {
-                            imgName = "ic_currency_indian_rupee";
-                        } else if (accountCurrency.equals("euro")) {
-                            imgName = "ic_currency_euro";
-                        } else if (accountCurrency.equals("australian dollar")) {
-                            imgName = "ic_currency_dollar";
-                        }
-                        currencyImage.setImageResource(getResources().getIdentifier(imgName, "drawable", getPackageName()));
-                    }
-
-                    //pre-selected the members from the selected account information
-                    String[] accountMembersList = accountMembers.split(",");
-                    int totalMembers = (int) accountMembersList.length;
-                    int noOfRows = 0;
-                    if ((totalMembers) % 2 >= 1) {
-                        noOfRows = (totalMembers / 2) + 1;
-                    } else {
-                        noOfRows = (totalMembers / 2);
-                    }
-                    gridLayoutAEEMember.setRowCount(noOfRows);
-                    gridLayoutAEEMember.setColumnCount(2);
-
-                    checkBox = MyUtils.loadMembersCheckbox(gridLayoutAEEMember, checkBox, accountMembersList, this);
-
-                    for (int indexAccountMembers = 0; indexAccountMembers < accountMembersList.length; indexAccountMembers++) {
-                        String memberTemp = accountMembersList[indexAccountMembers].trim().toLowerCase();
-                        for (int indexCheckBox = 0; indexCheckBox < checkBox.length; indexCheckBox++) {
-                            String checkBoxMemberName = checkBox[indexCheckBox].getText().toString().trim().toLowerCase();
-                            if (checkBoxMemberName.equals(memberTemp)) {
-                                checkBox[indexCheckBox].setChecked(true);
-                                break;
-                            }
-                        }
-                    }
-
-                } else if (eventActionSource.equals("TOOLBAR")) {
-                    String members[] = getResources().getStringArray(R.array.membersTemp);
-                    int totalMembers = (int) members.length;
-                    int noOfRows = 0;
-                    if ((totalMembers) % 2 >= 1) {
-                        noOfRows = (totalMembers / 2) + 1;
-                    } else {
-                        noOfRows = (totalMembers / 2);
-                    }
-
+                if (accountCurrency.equals("us dollar")) {
+                    imgName = "ic_currency_dollar";
+                } else if (accountCurrency.equals("canadian dollar")) {
+                    imgName = "ic_currency_dollar";
+                } else if (accountCurrency.equals("british pound")) {
+                    imgName = "ic_currency_pound";
+                } else if (accountCurrency.equals("indian rupee")) {
+                    imgName = "ic_currency_indian_rupee";
+                } else if (accountCurrency.equals("euro")) {
+                    imgName = "ic_currency_euro";
+                } else if (accountCurrency.equals("australian dollar")) {
+                    imgName = "ic_currency_dollar";
                 }
-            } else if (eventAction.equals("edit")) {
-                toolbar.setTitle("Edit Event");
+                currencyImage.setImageResource(getResources().getIdentifier(imgName, "drawable", getPackageName()));
             }
-        }
 
 ////**************************************** Dynamically add check box for members ***************************
 //        //display account members dynamically
@@ -198,6 +154,60 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
 //        //dynamically load the check for each members
 //        checkBox = MyUtils.loadMembersCheckbox(gridLayoutAEEMember, checkBox, members, this);
 ////**************************************** Dynamically add check box for members ***************************
+            //pre-selected the members from the selected account information
+            accountMembersList = accountMembers.split(",");
+            int totalMembers = (int) accountMembersList.length;
+            int noOfRows = 0;
+            if ((totalMembers) % 2 >= 1) {
+                noOfRows = (totalMembers / 2) + 1;
+            } else {
+                noOfRows = (totalMembers / 2);
+            }
+            gridLayoutAEEMember.setRowCount(noOfRows);
+            gridLayoutAEEMember.setColumnCount(2);
+            checkBox = MyUtils.loadMembersCheckbox(gridLayoutAEEMember, checkBox, accountMembersList, this);
+
+            if (eventAction.equals("add")) {
+                toolbar.setTitle("Add Event");
+
+                editTxtAEEventDate.setText(DateAndTimeHelper.getRawCurrentDate());
+
+                selectCheckBox(accountMembers);
+            } else if (eventAction.equals("edit")) {
+                toolbar.setTitle("Edit Event");
+
+                String eventDate = getIntent().getStringExtra(Constants.EDIT_EVENT_DATE);
+                String eventDescription = getIntent().getStringExtra(Constants.EDIT_EVENT_DESCRIPTION);
+                String eventCategory = getIntent().getStringExtra(Constants.EDIT_EVENT_CATEGORY);
+                String eventWhoPaid = getIntent().getStringExtra(Constants.EDIT_EVENT_WHO_PAID).toLowerCase().trim();
+                String eventAmount = getIntent().getStringExtra(Constants.EDIT_EVENT_AMOUNT);
+                String eventForWhom = getIntent().getStringExtra(Constants.EDIT_EVENT_FOR_WHOM);
+
+                //setting event - date
+                editTxtAEEventDate.setText(eventDate.replace(" ", "-"));
+
+                //setting event - description
+                textViewAEEDescription.setText(eventDescription);
+
+                //setting event - category
+                editTxtAEEChooseCategory.setText(eventCategory);
+
+                //setting event  - who paid
+                for (int index = 0; index < spinnerAEEWhoPaid.getAdapter().getCount(); index++) {
+                    String currentSpinnerItem = spinnerAEEWhoPaid.getItemAtPosition(index).toString().toLowerCase().trim();
+                    if (currentSpinnerItem.equals(eventWhoPaid)) {
+                        spinnerAEEWhoPaid.setSelection(index);
+                        break;
+                    }
+                }
+
+                //setting event - amount
+                editTxtAEEAmount.setText(eventAmount);
+
+                //selecting event - for whom
+                selectCheckBox(eventForWhom);
+            }
+        }
 
         textViewAEECheckAll = (TextView) findViewById(R.id.textViewAEECheckAll);
         textViewAEECheckAll.setOnClickListener(this);
@@ -215,6 +225,20 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    public void selectCheckBox(String membersToSelect) {
+        String[] membersToSelectList = membersToSelect.split(",");
+        for (int indexAccountMembers = 0; indexAccountMembers < membersToSelectList.length; indexAccountMembers++) {
+            String memberTemp = membersToSelectList[indexAccountMembers].trim().toLowerCase();
+            for (int indexCheckBox = 0; indexCheckBox < checkBox.length; indexCheckBox++) {
+                String checkBoxMemberName = checkBox[indexCheckBox].getText().toString().trim().toLowerCase();
+                if (checkBoxMemberName.equals(memberTemp)) {
+                    checkBox[indexCheckBox].setChecked(true);
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -226,7 +250,11 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
                 //This is to choose a category for the event
                 //The code will handle(remember the user choice) even if the user change the phone orientation
                 //so that user do not want to make a selection again after the orientation change
+                String currentCategory = editTxtAEEChooseCategory.getText().toString().trim();
                 ChooseCategoryDialogFragment chooseCategoryDialogFragment = new ChooseCategoryDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.CATEGORY_TO_CHOOSE, currentCategory);
+                chooseCategoryDialogFragment.setArguments(bundle);
                 chooseCategoryDialogFragment.show(getSupportFragmentManager(), "choose category");
 
                 break;
@@ -254,15 +282,14 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
                 //Upon successful after the validation --
                 // add the event to the selected account in "account_master" table
                 //and navigate to "all account" activity
-
-                super.onBackPressed();
-                MyUtils.myPendingTransitionLeftInRightOut(this);
+                from = "ok";
+                onBackPressed();
 
                 break;
 
             case R.id.imgAEABtnCancel:
-                super.onBackPressed();
-                MyUtils.myPendingTransitionLeftInRightOut(this);
+                from = "cancel";
+                onBackPressed();
 
                 break;
         }
@@ -284,18 +311,21 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                super.onBackPressed();
-
-                MyUtils.myPendingTransitionLeftInRightOut(this);
+                from = "cancel";
+                onBackPressed();
                 break;
 
             case R.id.action_tick:
+                from = "tick";
+                onBackPressed();
                 break;
 
             default:
+                //add account, add member, report, help & logout handled here
                 MyUtils.commonMenuActions(this, item);
-        }
 
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -321,6 +351,15 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
 
     @Override
     public void onBackPressed() {
+        if (from==null){
+            from = "cancel";
+        }
+        if((toolbar.getTitle().toString().toLowerCase().trim().equals("add event")) && (!from.equals("cancel"))){
+            MyUtils.showToast(this, "Event added successfully. Oops... no its WIP.....");
+        }else if((toolbar.getTitle().toString().toLowerCase().trim().equals("edit event")) && (!from.equals("cancel"))){
+            MyUtils.showToast(this, "Event updated successfully. Oops... no its WIP.....");
+        }
+
         super.onBackPressed();
 
         MyUtils.myPendingTransitionLeftInRightOut(this);

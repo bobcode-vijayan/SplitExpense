@@ -47,23 +47,10 @@ public final class MyUtils extends Application {
 
     public static final void commonMenuActions(Context context, MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-//            case android.R.id.home:
-//                MyUtils.showToast(context, "Navigation Up is pressed");
-//                NavUtils.navigateUpFromSameTask((Activity) context);
-
-//                break;
-
-            case R.id.action_settings:
-                MyUtils.showToast(context, "Settings is pressed");
-                break;
-
             case R.id.action_help:
-                MyUtils.showToast(context, "Help is pressed");
                 break;
 
             case R.id.action_logout:
-                //MyUtils.showToast(context, "Logout is pressed");
-
                 MySharedPrefs mySharedPrefs = new MySharedPrefs(context.getApplicationContext());
                 mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_REMEMBER_ME, "false");
                 context.startActivity(new Intent(context.getApplicationContext(), AuthenticationViewPageFragementActivity.class));
@@ -71,7 +58,7 @@ public final class MyUtils extends Application {
                 break;
 
             case R.id.action_add_account:
-                MyUtils.showToast(context, "Add Account is pressed");
+                MyUtils.showToast(context, "Adding account");
 
                 Intent intentAddAccount = new Intent(context.getApplicationContext(), AddOREditAccountActivity.class);
                 intentAddAccount.putExtra(Constants.ACCOUNT_ACTION, "ADD");
@@ -81,7 +68,7 @@ public final class MyUtils extends Application {
                 break;
 
             case R.id.action_members:
-                MyUtils.showToast(context, "Add Member is pressed");
+                MyUtils.showToast(context, "Viewing all members");
 
                 Intent intentAllMember = new Intent(context.getApplicationContext(), AllMembersActivity.class);
                 context.startActivity(intentAllMember);

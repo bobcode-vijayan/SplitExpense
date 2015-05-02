@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.bobcode.splitexpense.R;
+import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.helpers.GetContact;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -34,15 +35,14 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
 
     private FloatingActionButton fabtnOK;
 
+    private String from;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_member);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Add Member");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imgViewMemberPhoto = (ImageView) findViewById(R.id.imgViewMemberPhoto);
 
@@ -53,8 +53,23 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
         btnPickFromContact = (Button) findViewById(R.id.btnPickFromContact);
         btnPickFromContact.setOnClickListener(this);
 
-        fabtnOK = (FloatingActionButton) findViewById(R.id.fabtnAllAccounts);
+        fabtnOK = (FloatingActionButton) findViewById(R.id.fabtnOkMember);
         fabtnOK.setOnClickListener(this);
+
+        String memberAction = getIntent().getStringExtra(Constants.MEMBER_ACTION).trim();
+        if (memberAction != null){
+            toolbar.setTitle(memberAction + " Member");
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            //if the action is to edit the existing member detail
+            //pre-populate the selected member detail by default
+            if(memberAction.equals("Edit")){
+                editTextMemberName.setText(getIntent().getStringExtra(Constants.MEMBER_NAME));
+                editTextMemberDisplayName.setText(getIntent().getStringExtra(Constants.MEMBER_DISPLAY_NAME));
+                editTextMemberComments.setText(getIntent().getStringExtra(Constants.MEMBER_COMMENTS));
+            }
+        }
     }
 
 
@@ -67,9 +82,11 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
 
                 break;
 
-            case R.id.fabtnAllAccounts:
-                Intent intentAllMembers = new Intent(this, AllMembersActivity.class);
-                startActivity(intentAllMembers);
+            case R.id.fabtnOkMember:
+                from = "ok";
+
+                onBackPressed();
+
                 break;
         }
     }
@@ -78,7 +95,7 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_person, menu);
+        getMenuInflater().inflate(R.menu.menu_add_edit_member, menu);
         return true;
     }
 
@@ -88,16 +105,24 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id) {
             case android.R.id.home:
-                super.onBackPressed();
+                from = "cancel";
+                onBackPressed();
+
                 break;
 
-            case R.id.action_settings:
+            case R.id.action_tick:
+                from = "tick";
+                onBackPressed();
+                break;
+
+            default:
+                //add account, add member, report, help & logout handled here
+                MyUtils.commonMenuActions(this, item);
+
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -122,4 +147,18 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
             MyUtils.showToast(this, "Oops..... You have not selected any contact");
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if((toolbar.getTitle().toString().toLowerCase().trim().equals("add member")) && (!from.equals("cancel"))){
+            MyUtils.showToast(this, "Member added successfully");
+        }else if((toolbar.getTitle().toString().toLowerCase().trim().equals("edit member")) && (!from.equals("cancel"))){
+            MyUtils.showToast(this, "Member updated successfully");
+        }
+
+        super.onBackPressed();
+
+        MyUtils.myPendingTransitionLeftInRightOut(this);
+    }
+
 }

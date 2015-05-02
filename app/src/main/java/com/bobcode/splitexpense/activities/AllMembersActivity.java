@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.adapters.MembersDetailsAdapter;
+import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.models.MemberDetailModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -101,7 +102,9 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.fabtnAddMember:
                 Intent intentAddMember = new Intent(this, AddOREditMemberActivity.class);
+                intentAddMember.putExtra(Constants.MEMBER_ACTION, "Add");
                 startActivity(intentAddMember);
+                MyUtils.myPendingTransitionRightInLeftOut(this);
                 break;
         }
     }
@@ -121,9 +124,7 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                super.onBackPressed();
-
-                MyUtils.myPendingTransitionLeftInRightOut(this);
+                onBackPressed();
                 break;
 
             case R.id.action_all_accounts:
@@ -133,10 +134,12 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
                 MyUtils.myPendingTransitionRightInLeftOut(this);
                 break;
 
-            case R.id.action_settings:
+            default:
+                //add account, add member, report, help & logout handled here
+                MyUtils.commonMenuActions(this, item);
+
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,5 +149,4 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
 
         MyUtils.myPendingTransitionLeftInRightOut(this);
     }
-
 }

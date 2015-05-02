@@ -4,11 +4,11 @@
     tools:context="com.bobcode.splitexpense.activities.AddOREditEventActivity">
 
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:id="@+id/action_tick"
+        android:title="@string/action_tick"
         android:orderInCategory="100"
-        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_action_tick"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_help"
@@ -21,13 +21,5 @@
         android:title="@string/action_logout"
         android:orderInCategory="300"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_tick"
-        android:title="@string/action_tick"
-        android:orderInCategory="400"
-        android:icon="@drawable/ic_action_tick"
-        app:showAsAction="always" />
-
 
 </menu>

@@ -78,9 +78,7 @@ public class SplashScreenActivity extends ActionBarActivity implements View.OnCl
                 }
             }
         }, Constants.SPLASH_TIME_OUT);
-
     }
-
 
     private void updateTime() {
         //String mobileTime = DateAndTimeHelper.getMobileTime();
@@ -89,7 +87,6 @@ public class SplashScreenActivity extends ActionBarActivity implements View.OnCl
         txtViewCurrentTime.setText(DateAndTimeHelper.getCurrentTime());
         txtViewCurrentDate.setText(DateAndTimeHelper.getFormattedCurrentDate());
     }
-
 
     @Override
     protected void onDestroy() {
@@ -100,7 +97,6 @@ public class SplashScreenActivity extends ActionBarActivity implements View.OnCl
 
     @Override
     protected void onResume() {
-
         //This is to hide the status and navigation bar
         //however it can be reveal by an inward swipe along the region where
         //the status and navigation bar normally appear

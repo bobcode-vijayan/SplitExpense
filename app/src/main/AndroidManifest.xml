@@ -28,11 +28,13 @@
             android:name=".activities.AllAccountsActivity"
             android:label="Split Expense"
             android:launchMode="singleTask">
-
+            
         </activity>
+
         <activity
             android:name=".activities.AddOREditEventActivity"
-            android:label="@string/title_activity_add_event">
+            android:label="@string/title_activity_add_event"
+            android:launchMode="singleTask">
 
         </activity>
         <activity
@@ -53,17 +55,20 @@
         </activity>
         <activity
             android:name=".activities.AddOREditMemberActivity"
-            android:label="@string/title_activity_add_person">
+            android:label="@string/title_activity_add_person"
+            android:launchMode="singleTask">
 
         </activity>
         <activity
             android:name=".activities.PayoutActivity"
-            android:label="@string/title_activity_payout">
+            android:label="@string/title_activity_payout"
+            android:launchMode="singleTask">
 
         </activity>
         <activity
             android:name=".activities.ForgotCredentialActivity"
-            android:label="@string/title_activity_forgot_credential">
+            android:label="@string/title_activity_forgot_credential"
+            android:launchMode="singleTask">
 
         </activity>
     </application>
