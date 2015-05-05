@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.activities.AddOREditMemberActivity;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.models.MemberDetailModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -53,12 +54,20 @@ public class MembersDetailsAdapter extends RecyclerView.Adapter<MembersDetailsAd
         //This is to ensure floating action button will not hide away
         FloatingActionButton floatingActionButton = (FloatingActionButton)activity.findViewById(R.id.fabtnAddMember);
         floatingActionButton.show();
+
+        //This is to display a no member exists message if no member exits
+        if(memberDetailModelArrayList.size()==0){
+            Activity activity = (Activity) context;
+            TextView textViewNoMemberExists = (TextView) activity.findViewById(R.id.textViewNoMemberExists);
+            textViewNoMemberExists.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onBindViewHolder(MembersDetailsItemViewHolder holder, int position) {
         memberDetailModel = memberDetailModelArrayList.get(position);
 
+        holder.imgViewMemberPhoto.setImageBitmap(memberDetailModel.photo);
         holder.txtViewMembersName.setText(memberDetailModel.name);
         holder.txtViewMembersDisplayName.setText(memberDetailModel.displayName);
         holder.txtViewMembersComments.setText(memberDetailModel.comments);
@@ -71,6 +80,7 @@ public class MembersDetailsAdapter extends RecyclerView.Adapter<MembersDetailsAd
     }
 
     public class MembersDetailsItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+        protected ImageView imgViewMemberPhoto;
         protected TextView txtViewMembersName;
         protected TextView txtViewMembersDisplayName;
         protected TextView txtViewMembersComments;
@@ -97,6 +107,7 @@ public class MembersDetailsAdapter extends RecyclerView.Adapter<MembersDetailsAd
             this.context = context;
             this.memberDetailModelArrayList = memberDetailModelArrayList;
 
+            imgViewMemberPhoto = (ImageView) itemView.findViewById(R.id.imgViewMemberPhoto);
             txtViewMembersName = (TextView) itemView.findViewById(R.id.editTextMemberName);
             txtViewMembersDisplayName = (TextView) itemView.findViewById(R.id.editTextMemberDisplayName);
             txtViewMembersComments = (TextView) itemView.findViewById(R.id.editTextMemberComments);
@@ -123,9 +134,8 @@ public class MembersDetailsAdapter extends RecyclerView.Adapter<MembersDetailsAd
                     break;
 
                 case R.id.imgEditMemberDetail:
-                    MyUtils.showToast(context, "Edit Event Icon clicked");
-
                     Intent intentEditMember = new Intent(context, AddOREditMemberActivity.class);
+                    intentEditMember.putExtra(Constants.MEMBER_PHOTO, MyUtils.getBytes(memberDetailModelArrayList.get(position).photo));
                     intentEditMember.putExtra(Constants.MEMBER_ACTION, "Edit");
                     intentEditMember.putExtra(Constants.MEMBER_NAME, memberDetailModelArrayList.get(position).name);
                     intentEditMember.putExtra(Constants.MEMBER_DISPLAY_NAME, memberDetailModelArrayList.get(position).displayName);
@@ -177,9 +187,19 @@ public class MembersDetailsAdapter extends RecyclerView.Adapter<MembersDetailsAd
         }
 
         public void deleteMemberFromTable(String memberName){
-            MyUtils.showToast(context, "Event " + memberName + " deleted.......");
+            try{
+                //remove the user from recycler view list
+                remove(getPosition());
 
-            remove(getPosition());
+                //delete the user from table
+                SplitExpenseSQLiteHelper splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(context);
+                splitExpenseSQLiteHelper.deleteAMember(memberName);
+
+                MyUtils.showToast(context, memberName + " deleted successfully");
+            }catch (Exception e){
+                MyUtils.showToast(context, "error deleting member");
+                e.printStackTrace();
+            }
         }
     }
 }

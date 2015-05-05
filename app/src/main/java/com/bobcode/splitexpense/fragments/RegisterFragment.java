@@ -14,8 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.bobcode.splitexpense.R;
-import com.bobcode.splitexpense.interfaces.Communicator;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.DateAndTimeHelper;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
+import com.bobcode.splitexpense.interfaces.Communicator;
+import com.bobcode.splitexpense.models.UserProfileModel;
 import com.bobcode.splitexpense.utils.MySharedPrefs;
 import com.bobcode.splitexpense.utils.MyUtils;
 
@@ -44,6 +47,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
     private Communicator communicator;
 
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+
     public static RegisterFragment newInstance(int pageNumber, String pageName) {
         RegisterFragment registerFragment = new RegisterFragment();
 
@@ -70,6 +75,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         pageNumber = getArguments().getInt("pageNumber", 0);
         pageName = getArguments().getString("pageName");
+
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this.getActivity());
     }
 
     @Override
@@ -104,11 +111,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
         switch (v.getId()) {
             case R.id.btnSignUpClear:
-                //clear all the editbox value if user click the clear button
-                editTxtSignUpUserName.setText("");
-                editTxtSignUpPassword.setText("");
-                editTxtSignUpConfirmPassword.setText("");
-                editTxtSignUpAnswer.setText("");
+                //clear all the edit-box value if user click the clear button
+                clearAllField();
 
                 //set the focus to user name field
                 editTxtSignUpUserName.setFocusable(true);
@@ -116,12 +120,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 break;
 
             case R.id.btnSignUp:
-
                 //validate user name min char if not show the toast message
                 //user name must be >=4
                 if (!MyUtils.minCharCheck(sSignUpUserName, Constants.USERNAME_MIN_LENGTH)) {
                     MyUtils.showToast(getActivity(), "user name must contain at least 4 characters!");
                     isSingUpUserNameValid = false;
+                    return;
                 } else {
                     isSingUpUserNameValid = true;
                 }
@@ -131,6 +135,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 if (!MyUtils.minCharCheck(sSignUpPassword, Constants.PASSWORD_MIN_LENGTH)) {
                     MyUtils.showToast(getActivity(), "password must contain at least 6 characters!");
                     isSignUpPasswordValid = false;
+                    return;
                 } else {
                     isSignUpPasswordValid = true;
                 }
@@ -145,6 +150,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     editTxtSignUpConfirmPassword.requestFocus();
 
                     isConfirmPasswordMatch = false;
+                    return;
                 } else {
                     isConfirmPasswordMatch = true;
                 }
@@ -157,18 +163,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     editTxtSignUpAnswer.requestFocus();
 
                     isSignUpAnswerValid = false;
+                    return;
                 } else {
                     isSignUpAnswerValid = true;
                 }
 
-                if (isSingUpUserNameValid && isSignUpPasswordValid && isSignUpAnswerValid && isConfirmPasswordMatch) {
+                if (isSingUpUserNameValid && isSignUpPasswordValid && isConfirmPasswordMatch && isSignUpAnswerValid ) {
                     //store the data in "user_profile" table
-//--------------------------- pending -----------------------------------------------------//
-                    //upon successful sign-up, save the user detail to database
-                    //field to save 1) user name
-                    //              2) password
-                    //              3) answer
-//--------------------------- pending -----------------------------------------------------//
+                    String todayDate = DateAndTimeHelper.getRawCurrentDate();
+                    todayDate = todayDate.replace(" ", "-");
+
+                    UserProfileModel userProfileModel = new UserProfileModel(sSignUpUserName, sSignUpPassword, sSecurityAnswer, todayDate);
+                    splitExpenseSQLiteHelper.registerAUser(userProfileModel);
+
+                    clearAllField();
 
                     //calling the interface to pass the registered user name to Login Fragment
                     communicator.registeredUserName(sSignUpUserName);
@@ -181,13 +189,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
+    //This is to clear all the input field in Registration fragment
+    public void clearAllField(){
+        editTxtSignUpUserName.setText("");
+        editTxtSignUpPassword.setText("");
+        editTxtSignUpConfirmPassword.setText("");
+        editTxtSignUpAnswer.setText("");
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         //read the user input
         final String sSignUpUserName = editTxtSignUpUserName.getText().toString().trim();
         final String sSignUpPassword = editTxtSignUpPassword.getText().toString().trim();
         final String sSignUpConfirmPassword = editTxtSignUpConfirmPassword.getText().toString().trim();
-        final String sSecurityAnswer = editTxtSignUpAnswer.getText().toString().trim();
 
         switch (v.getId()) {
 
@@ -207,7 +222,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 }
                 return true;
 
-
             case R.id.editTxtSignUpConfirmPassword:
                 if (sSignUpPassword.isEmpty()) {
                     MyUtils.showToast(getActivity(), "enter password before confirm password");
@@ -223,7 +237,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
 
                     return false;
                 }
-
                 return true;
 
             case R.id.editTxtSignUpAnswer:
@@ -236,7 +249,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 }
                 return true;
         }
-
         return false;
     }
 
@@ -244,5 +256,4 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
     }
-
 }

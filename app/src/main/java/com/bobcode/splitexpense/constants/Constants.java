@@ -43,6 +43,7 @@ public final class Constants {
     public static final String CATEGORY_TO_CHOOSE = "com.bobcode.splitexpense.CATEGORY_TO_CHOOSE";
 
     public static final String MEMBER_ACTION ="com.bobcode.splitexpense.MEMBER_ACTION";
+    public static final String MEMBER_PHOTO ="com.bobcode.splitexpense.MEMBER_PHOTO";
     public static final String MEMBER_NAME ="com.bobcode.splitexpense.MEMBER_NAME";
     public static final String MEMBER_DISPLAY_NAME ="com.bobcode.splitexpense.MEMBER_DISPLAY_NAME";
     public static final String MEMBER_COMMENTS ="com.bobcode.splitexpense.MEMBER_COMMENTS";

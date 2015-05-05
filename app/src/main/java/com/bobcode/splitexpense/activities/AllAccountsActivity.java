@@ -163,7 +163,6 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
 
                 break;
         }
-        MyUtils.myPendingTransitionRightInLeftOut(this);
         return super.onOptionsItemSelected(item);
     }
 }

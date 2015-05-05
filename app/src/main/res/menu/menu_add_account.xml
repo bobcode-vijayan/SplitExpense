@@ -22,4 +22,11 @@
         android:title="@string/action_logout"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_exit"
+        android:title="@string/action_exit"
+        android:orderInCategory="400"
+        app:showAsAction="never" />
+
+
 </menu>

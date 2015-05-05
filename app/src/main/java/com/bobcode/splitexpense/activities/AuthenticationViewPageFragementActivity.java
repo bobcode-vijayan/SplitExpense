@@ -8,7 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 
 import com.bobcode.splitexpense.R;
-import com.bobcode.splitexpense.adapters.MyFragmentPageAdapter;
+import com.bobcode.splitexpense.adapters.AuthenticationFragmentPageAdapter;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.interfaces.Communicator;
 import com.bobcode.splitexpense.tablayouts.SlidingTabLayout;
 
@@ -24,16 +25,20 @@ public class AuthenticationViewPageFragementActivity extends FragmentActivity im
 
     private Toolbar toolbar;
 
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authentication_viewpager);
 
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Split Expense");
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        fragmentPagerAdapter = new MyFragmentPageAdapter(getSupportFragmentManager(), this);
+        fragmentPagerAdapter = new AuthenticationFragmentPageAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(fragmentPagerAdapter);
 
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.slidingTabLayout);
@@ -52,13 +57,16 @@ public class AuthenticationViewPageFragementActivity extends FragmentActivity im
                 return getResources().getColor(R.color.accent);
             }
         });
-//--------------------------- pending -----------------------------------------------------//
+
         //check if any register user. If any registered user in "userprofile" table
         //set the viewPager to 0th item (Login Page)
         //if no registered user found, set the viewPager to 1th item(Registration page)
-        viewPager.setCurrentItem(1);
-//--------------------------- pending -----------------------------------------------------//
-
+        int count = splitExpenseSQLiteHelper.getRegisteredUserCount();
+        if (count==0 ){
+            viewPager.setCurrentItem(1);
+        }else if(count >=1){
+            viewPager.setCurrentItem(0);
+        }
     }
 
     @Override
@@ -66,5 +74,9 @@ public class AuthenticationViewPageFragementActivity extends FragmentActivity im
         //Setting the user name upon successful completion of user registration
         EditText editTxtLoginUserName = (EditText) findViewById(R.id.editTxtLoginUserName);
         editTxtLoginUserName.setText(userName);
+
+        //make sure password field will be empty
+        EditText editTxtLoginPassword = (EditText) findViewById(R.id.editTxtLoginPassword);
+        editTxtLoginPassword.setText("");
     }
 }

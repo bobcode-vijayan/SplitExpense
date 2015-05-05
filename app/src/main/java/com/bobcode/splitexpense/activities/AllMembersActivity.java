@@ -1,6 +1,7 @@
 package com.bobcode.splitexpense.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.adapters.MembersDetailsAdapter;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.models.MemberDetailModel;
+import com.bobcode.splitexpense.models.MemberProfileModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -33,6 +36,10 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
     private RecyclerView cardListForAllMembers;
 
     private List<MemberDetailModel> memberDetailModelList;
+
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+
+    private List<MemberProfileModel> allAddedMembersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,34 +72,28 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cardListForAllMembers.setLayoutManager(linearLayoutManager);
 
-//------------------------------- Pending -------------------------------------------------------
         //validate if any member exits in "members profile" table
         //if any member exits display all the members details from the table
         //else display the text message to the user to create an member to begin with
-        boolean isMemberExits = true;
-        if (isMemberExits) {
-            //Data
-            MemberDetailModel member1 = new MemberDetailModel("Vijayan Anjalees", "Vijayan", "Friend");
-            MemberDetailModel member2 = new MemberDetailModel("Senthil CRO", "Senthil", "Friend");
-            MemberDetailModel member3 = new MemberDetailModel("Amitesh Dixit", "Amitesh", "Friend");
-            MemberDetailModel member4 = new MemberDetailModel("Shanmuga", "Shanmuga", "Friend");
-            MemberDetailModel member5 = new MemberDetailModel("Shanmuga Vadivel", "Shanmuga Vadivel", "Friend");
-            MemberDetailModel member6 = new MemberDetailModel("Vinod Dewangan", "Vinod", "Friend");
-
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
+        int totalMembers = splitExpenseSQLiteHelper.getMembersCount();
+        if(totalMembers >=1){
+            allAddedMembersList = splitExpenseSQLiteHelper.getAllMembers();
             memberDetailModelList = new ArrayList<>();
-            memberDetailModelList.add(member1);
-            memberDetailModelList.add(member2);
-            memberDetailModelList.add(member3);
-            memberDetailModelList.add(member4);
-            memberDetailModelList.add(member5);
-            memberDetailModelList.add(member6);
+            for (MemberProfileModel currentMemberDetail : allAddedMembersList) {
+                Bitmap photo = currentMemberDetail.getPhoto();
+                String currentName = currentMemberDetail.getName().trim();
+                String currentDisplayName = currentMemberDetail.getDisplayName().trim();
+                String currentComments = currentMemberDetail.getComments().trim();
+                MemberDetailModel member = new MemberDetailModel(photo, currentName, currentDisplayName, currentComments);
+                memberDetailModelList.add(member);
+            }
 
             MembersDetailsAdapter membersDetailsAdapter = new MembersDetailsAdapter(this, (ArrayList) memberDetailModelList);
             cardListForAllMembers.setAdapter(membersDetailsAdapter);
-        } else {
-            cardListForAllMembers.setVisibility(View.VISIBLE);
+        }else if(totalMembers ==0){
+            textViewNoMemberExists.setVisibility(View.VISIBLE);
         }
-//------------------------------- Pending -------------------------------------------------------
 //************************ Recycler view to display all the available members ****************************
 
     }
@@ -101,6 +102,7 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fabtnAddMember:
+                finish();
                 Intent intentAddMember = new Intent(this, AddOREditMemberActivity.class);
                 intentAddMember.putExtra(Constants.MEMBER_ACTION, "Add");
                 startActivity(intentAddMember);
@@ -129,6 +131,7 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
 
             case R.id.action_all_accounts:
                 Intent intentAllAccounts = new Intent(this, AllAccountsActivity.class);
+                intentAllAccounts.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intentAllAccounts);
 
                 MyUtils.myPendingTransitionRightInLeftOut(this);

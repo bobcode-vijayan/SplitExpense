@@ -28,7 +28,7 @@
             android:name=".activities.AllAccountsActivity"
             android:label="Split Expense"
             android:launchMode="singleTask">
-            
+
         </activity>
 
         <activity
@@ -55,8 +55,7 @@
         </activity>
         <activity
             android:name=".activities.AddOREditMemberActivity"
-            android:label="@string/title_activity_add_person"
-            android:launchMode="singleTask">
+            android:label="@string/title_activity_add_person">
 
         </activity>
         <activity

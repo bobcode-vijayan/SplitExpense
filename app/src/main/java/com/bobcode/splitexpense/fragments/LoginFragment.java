@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,8 +19,14 @@ import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.activities.AllAccountsActivity;
 import com.bobcode.splitexpense.activities.ForgotCredentialActivity;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
+import com.bobcode.splitexpense.models.UserProfileModel;
 import com.bobcode.splitexpense.utils.MySharedPrefs;
 import com.bobcode.splitexpense.utils.MyUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by vijayananjalees on 4/2/15.
  */
@@ -43,7 +50,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
     private MySharedPrefs mySharedPrefs;
 
-    private boolean isLoginValidationSuccess;
+    private boolean isLoginValidationSuccess = false;
+
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+
+    private List<UserProfileModel> allRegisteredUser;
 
     public static LoginFragment newInstance(int pageNumber, String pageName) {
         LoginFragment loginFragment = new LoginFragment();
@@ -61,6 +72,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
         super.onCreate(savedInstanceState);
         pageNumber = getArguments().getInt("pageNumber", 0);
         pageName = getArguments().getString("pageName");
+
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this.getActivity());
     }
 
     @Override
@@ -105,19 +118,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.txtViewLoginForgotCredentials:
                 txtViewForgotCredentials.setTextColor(getResources().getColor(R.color.accent));
-//--------------------------- pending -----------------------------------------------------//
-                //take the user to forgot credential activity
-                //spinner to select a user name from all registered user
-                //edit field to enter the security question answer
-                //upon validating the answer, revel the password
 
                 Intent intentForgotCredential = new Intent(getActivity(), ForgotCredentialActivity.class);
                 startActivity(intentForgotCredential);
                 MyUtils.myPendingTransitionRightInLeftOut(getActivity());
-//--------------------------- pending -----------------------------------------------------//
 
                 break;
 
@@ -132,50 +138,72 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
             case R.id.btnLogin:
                 //read the user input
-                String strSignUpUserName = editTxtLoginUserName.getText().toString().trim();
-                String strSignUpPassword = editTxtLoginPassword.getText().toString().trim();
+                String strLoginUserName = editTxtLoginUserName.getText().toString().trim();
+                String strLoginPassword = editTxtLoginPassword.getText().toString().trim();
 
                 //validate user name min char
-                if (!MyUtils.minCharCheck(strSignUpUserName, Constants.USERNAME_MIN_LENGTH)) {
+                if (!MyUtils.minCharCheck(strLoginUserName, Constants.USERNAME_MIN_LENGTH)) {
                     MyUtils.showToast(getActivity(), "user name minimum char should be 4");
                     isLoginUserNameValid = false;
 
                     //if minimum char not met, set the focus to user name field
                     editTxtLoginUserName.setFocusable(true);
                     editTxtLoginUserName.requestFocus();
+                    return;
                 } else {
                     isLoginUserNameValid = true;
                 }
 
                 //validate password min char
-                if (!MyUtils.minCharCheck(strSignUpPassword, Constants.PASSWORD_MIN_LENGTH)) {
+                if (!MyUtils.minCharCheck(strLoginPassword, Constants.PASSWORD_MIN_LENGTH)) {
                     MyUtils.showToast(getActivity(), "password minimum char should be 6");
                     isLoginPasswordValid = false;
-
-                    if (isLoginUserNameValid) {
-                        editTxtLoginPassword.setFocusable(true);
-                        editTxtLoginPassword.requestFocus();
-                    }
+                    return;
                 } else {
                     isLoginPasswordValid = true;
                 }
 
+                //Validating the entered login credential with already registered user from "user_profile" table
                 if (isLoginUserNameValid && isLoginPasswordValid) {
                     //retrieve registered user's data from "user_profile" table
-//--------------------------- pending -----------------------------------------------------//
                     //field to retrieve 1) user name
                     //              2) password
-                    //validate against entered user name and password
-                    //action based on validation
+                    //if no registered user found, show toast message and take the user to registration page
+                    //Else validate against entered user name and password and action based on validation
                     //strSignUpUserName.equals(username-"user_profile") && strSignUpPassword.equals(password-"user_profile")
-                    isLoginValidationSuccess = true;
-//--------------------------- pending -----------------------------------------------------//
+                    allRegisteredUser = new ArrayList<UserProfileModel>();
+                    allRegisteredUser = splitExpenseSQLiteHelper.getAllRegisteredUser();
+                    int registerUsersCount = allRegisteredUser.size();
+                    if (registerUsersCount == 0) {
+                        MyUtils.showToast(getActivity(), "No registered user found. Register before login");
+
+                        editTxtLoginUserName.setText("");
+                        editTxtLoginPassword.setText("");
+
+                        isLoginValidationSuccess = false;
+
+                        //take the user to registration page
+                        ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.viewPager);
+                        viewPager.setCurrentItem(1);
+                        return;
+                    } else {
+                        for (UserProfileModel currentRegisteredUser : allRegisteredUser) {
+                            String currentUserName = currentRegisteredUser.getUserName().trim();
+                            String currentPassword = currentRegisteredUser.getPassword().trim();
+                            if ((strLoginUserName.equals(currentUserName)) && (strLoginPassword.equals(currentPassword))) {
+                                isLoginValidationSuccess = true;
+
+                                break;
+                            }
+                        }
+                    }
+
                     if (isLoginValidationSuccess) {
                         //validate whether user selected "remember me" checkbox
                         //if it is selected, store the "user name" and "remember me" in shared preference
                         if (checkBoxRememberMe.isChecked()) {
                             mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_REMEMBER_ME, "true");
-                            mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_USERNAME, strSignUpUserName);
+                            mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_USERNAME, strLoginUserName);
                         } else {
                             mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_REMEMBER_ME, "false");
                             mySharedPrefs.storeDataToSharePrefs(mySharedPrefs.PREFS_KEY_FOR_USERNAME, "");
@@ -190,6 +218,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
                     } else {
                         MyUtils.showToast(getActivity(), "user name or password is invalid");
+
+                        editTxtLoginUserName.setFocusable(true);
+                        editTxtLoginUserName.requestFocus();
                     }
                 }
                 break;

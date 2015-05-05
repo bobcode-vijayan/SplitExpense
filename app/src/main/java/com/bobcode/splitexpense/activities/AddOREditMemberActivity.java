@@ -1,6 +1,7 @@
 package com.bobcode.splitexpense.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
@@ -14,9 +15,16 @@ import android.widget.ImageView;
 
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.DateAndTimeHelper;
 import com.bobcode.splitexpense.helpers.GetContact;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
+import com.bobcode.splitexpense.models.MemberDetailModel;
+import com.bobcode.splitexpense.models.MemberProfileModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddOREditMemberActivity extends ActionBarActivity implements View.OnClickListener {
@@ -36,6 +44,12 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
     private FloatingActionButton fabtnOK;
 
     private String from;
+
+    private String memeberNameToEdit;
+
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+    private List<MemberProfileModel> allAddedMembersList;
+    private List<MemberDetailModel> memberDetailModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +71,23 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
         fabtnOK.setOnClickListener(this);
 
         String memberAction = getIntent().getStringExtra(Constants.MEMBER_ACTION).trim();
-        if (memberAction != null){
+        if (memberAction != null) {
             toolbar.setTitle(memberAction + " Member");
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
             //if the action is to edit the existing member detail
             //pre-populate the selected member detail by default
-            if(memberAction.equals("Edit")){
-                editTextMemberName.setText(getIntent().getStringExtra(Constants.MEMBER_NAME));
+            if (memberAction.equals("Edit")) {
+                imgViewMemberPhoto.setImageBitmap(MyUtils.getPhoto(getIntent().getByteArrayExtra(Constants.MEMBER_PHOTO)));
+                memeberNameToEdit = getIntent().getStringExtra(Constants.MEMBER_NAME);
+                editTextMemberName.setText(memeberNameToEdit);
                 editTextMemberDisplayName.setText(getIntent().getStringExtra(Constants.MEMBER_DISPLAY_NAME));
                 editTextMemberComments.setText(getIntent().getStringExtra(Constants.MEMBER_COMMENTS));
             }
         }
+
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
     }
 
 
@@ -84,8 +102,11 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
 
             case R.id.fabtnOkMember:
                 from = "ok";
-
-                onBackPressed();
+                if(toolbar.getTitle().toString().trim().equals("Add Member")){
+                    addAMember();
+                }else if(toolbar.getTitle().toString().trim().equals("Edit Member")){
+                    editAMember();
+                }
 
                 break;
         }
@@ -114,7 +135,12 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
 
             case R.id.action_tick:
                 from = "tick";
-                onBackPressed();
+                if(toolbar.getTitle().toString().trim().equals("Add Member")){
+                    addAMember();
+                }else if(toolbar.getTitle().toString().trim().equals("Edit Member")){
+                    editAMember();
+                }
+
                 break;
 
             default:
@@ -125,7 +151,6 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -148,17 +173,122 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
         }
     }
 
+    public void addAMember() {
+        //validate name, display name and comments fields are not empty
+        //if all the above said fields are not empty add the member
+        //else provide the appropriate toast message to user
+
+        if (editTextMemberName.getText().toString().trim().isEmpty()) {
+            MyUtils.showToast(this, "member name should not be empty");
+            editTextMemberName.setFocusable(true);
+            editTextMemberName.requestFocus();
+        } else if (editTextMemberDisplayName.getText().toString().trim().isEmpty()) {
+            MyUtils.showToast(this, "member display name should not be empty");
+            editTextMemberDisplayName.setFocusable(true);
+            editTextMemberDisplayName.requestFocus();
+        } else if (editTextMemberComments.getText().toString().trim().isEmpty()) {
+            MyUtils.showToast(this, "member comments should not be empty");
+            editTextMemberComments.setFocusable(true);
+            editTextMemberComments.requestFocus();
+        } else {
+            try {
+                //validate whether this member already exists by name field
+                //if already exists show the appropriate toast message
+                //else add the member
+                String name = editTextMemberName.getText().toString().trim();
+                allAddedMembersList = splitExpenseSQLiteHelper.getAllMembers();
+                memberDetailModelList = new ArrayList<>();
+                for (MemberProfileModel currentMemberDetail : allAddedMembersList) {
+                    String currentName = currentMemberDetail.getName().trim();
+                    if (currentName.equals(name)) {
+                        MyUtils.showToast(this, "member already exits");
+
+                        return;
+                    }
+                }
+
+                imgViewMemberPhoto.buildDrawingCache();
+                Bitmap photo = imgViewMemberPhoto.getDrawingCache();
+                String displayName = editTextMemberDisplayName.getText().toString().trim();
+                String comments = editTextMemberComments.getText().toString().trim();
+
+                String todayDate = DateAndTimeHelper.getRawCurrentDate();
+                todayDate = todayDate.replace(" ", "-");
+
+                MemberProfileModel memberProfileModel = new MemberProfileModel(photo, name, displayName, comments, todayDate, todayDate);
+                splitExpenseSQLiteHelper.addAMember(memberProfileModel);
+
+                MyUtils.showToast(this, "member added successfully");
+
+                finish();
+
+                Intent intentAllMembers = new Intent(this, AllMembersActivity.class);
+                startActivity(intentAllMembers);
+                MyUtils.myPendingTransitionLeftInRightOut(this);
+            } catch (Exception e) {
+                MyUtils.showToast(this, "error adding member");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //This function is to update the existing member detail
+    public void editAMember(){
+        try{
+            //take the user entered data
+            //compare with the "member_profile" table that whether the user exist or not by comparing name
+            //if exist, show proper toast message
+            //else update the member data with the entered values
+
+            //member photo
+            imgViewMemberPhoto.buildDrawingCache();
+            Bitmap photo = imgViewMemberPhoto.getDrawingCache();
+
+            //member name
+            String name = editTextMemberName.getText().toString().trim();
+            allAddedMembersList = splitExpenseSQLiteHelper.getAllMembers();
+            memberDetailModelList = new ArrayList<>();
+            for (MemberProfileModel currentMemberDetail : allAddedMembersList) {
+                String currentName = currentMemberDetail.getName().trim();
+                if (currentName.equals(name)) {
+                    MyUtils.showToast(this, "member already exits");
+
+                    return;
+                }
+            }
+
+            //member display name
+            String displayName = editTextMemberDisplayName.getText().toString().trim();
+
+            //member comments
+            String comments = editTextMemberComments.getText().toString().trim();
+
+            //getting the current date. this is to update the "last modified" column in "member_profile" table
+            String todayDate = DateAndTimeHelper.getRawCurrentDate();
+            todayDate = todayDate.replace(" ", "-");
+
+            MemberProfileModel memberProfileModel = new MemberProfileModel(photo, name, displayName, comments, todayDate);
+            splitExpenseSQLiteHelper.updateAMember(memeberNameToEdit, memberProfileModel);
+
+            MyUtils.showToast(this, "member updated successfully");
+
+            finish();
+
+            Intent intentAllMembers = new Intent(this, AllMembersActivity.class);
+            startActivity(intentAllMembers);
+            MyUtils.myPendingTransitionLeftInRightOut(this);
+
+        }catch(Exception e){
+            MyUtils.showToast(this, "error updating member");
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     public void onBackPressed() {
-        if((toolbar.getTitle().toString().toLowerCase().trim().equals("add member")) && (!from.equals("cancel"))){
-            MyUtils.showToast(this, "Member added successfully");
-        }else if((toolbar.getTitle().toString().toLowerCase().trim().equals("edit member")) && (!from.equals("cancel"))){
-            MyUtils.showToast(this, "Member updated successfully");
-        }
-
         super.onBackPressed();
 
         MyUtils.myPendingTransitionLeftInRightOut(this);
     }
-
 }

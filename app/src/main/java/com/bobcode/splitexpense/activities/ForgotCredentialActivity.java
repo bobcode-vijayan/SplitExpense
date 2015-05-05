@@ -14,20 +14,41 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bobcode.splitexpense.R;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
+import com.bobcode.splitexpense.models.UserProfileModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+//--------------------------------------------------------------------------------//
+//take the user to forgot credential activity
+//spinner to select a user name from all registered user
+//edit field to enter the security question answer
+//upon validating the answer, revel the password
+//--------------------------------------------------------------------------------//
 
 public class ForgotCredentialActivity extends ActionBarActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
 
+    private TextView textViewForgotCredUseName;
+
     private Spinner spinnerForgotCredUserName;
+
+    private TextView textViewForgotCredQuestionLabel;
 
     private EditText editViewForgotCredAnswer;
 
     private TextView textViewRevelPassword;
 
     private ImageButton fabtnForgotPassword;
+
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+
+    private List<UserProfileModel> allRegisteredUser;
+
+    private boolean isRegisteredUserFound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +60,14 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //label for user name
+        textViewForgotCredUseName = (TextView) findViewById(R.id.textViewForgotCredUseName);
+
         //spinner to select user name
         spinnerForgotCredUserName = (Spinner) findViewById(R.id.spinnerForgotCredUserName);
-        String[] registeredUsers = getResources().getStringArray(R.array.userTemp);
-        ArrayAdapter<String> adapterForRegisteredUsers = new ArrayAdapter<String>(this, R.layout.spinner_item, R.id.textViewSpinner, registeredUsers);
-        adapterForRegisteredUsers.setDropDownViewResource(R.layout.spinner_item);
-        spinnerForgotCredUserName.setAdapter(adapterForRegisteredUsers);
+
+        //label for the security question
+        textViewForgotCredQuestionLabel = (TextView) findViewById(R.id.textViewForgotCredQuestionLabel);
 
         //answer for the security question
         editViewForgotCredAnswer = (EditText) findViewById(R.id.editViewForgotCredAnswer);
@@ -55,8 +78,35 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         //fb btn for OK
         fabtnForgotPassword = (ImageButton) findViewById(R.id.fabtnForgotPassword);
         fabtnForgotPassword.setOnClickListener(this);
-    }
 
+        //populate spinner with all the registered user from "user_profile" table
+        allRegisteredUser = new ArrayList<UserProfileModel>();
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
+        allRegisteredUser = splitExpenseSQLiteHelper.getAllRegisteredUser();
+        List<String> userNames = new ArrayList<String>();
+        int registerUsersCount = allRegisteredUser.size();
+        if (registerUsersCount != 0) {
+            isRegisteredUserFound = true;
+
+            for (UserProfileModel currentRegisteredUser : allRegisteredUser) {
+                String currentUserName = currentRegisteredUser.getUserName().trim();
+                userNames.add(currentUserName);
+            }
+            ArrayAdapter<String> adapterForRegisteredUsers = new ArrayAdapter<String>(this, R.layout.spinner_item, R.id.textViewSpinner, userNames);
+            adapterForRegisteredUsers.setDropDownViewResource(R.layout.spinner_item);
+            spinnerForgotCredUserName.setAdapter(adapterForRegisteredUsers);
+        } else {
+            isRegisteredUserFound = false;
+
+            textViewForgotCredUseName.setVisibility(View.INVISIBLE);
+            spinnerForgotCredUserName.setVisibility(View.INVISIBLE);
+            textViewForgotCredQuestionLabel.setVisibility(View.INVISIBLE);
+            editViewForgotCredAnswer.setVisibility(View.INVISIBLE);
+
+            textViewRevelPassword.setText("No registered user found");
+            textViewRevelPassword.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,36 +141,49 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fabtnForgotPassword:
-                String answer = editViewForgotCredAnswer.getText().toString().trim();
-                if (answer.isEmpty()) {
-                    MyUtils.showToast(this, "enter answer to revel the password");
-                    editViewForgotCredAnswer.setFocusable(true);
-                    editViewForgotCredAnswer.requestFocus();
-                } else {
-//--------------------------- pending -----------------------------------------------------//
-                    //edit field to enter the security question answer
-                    //upon validating the answer for the selected user from the "user_profile" table
-                    // if answer matches, revel the password else
-                    // show toast message - "incorrect answer"
-                    textViewRevelPassword.setText("password_reveled");
-                    textViewRevelPassword.setVisibility(View.VISIBLE);
-                    fabtnForgotPassword.setVisibility(View.INVISIBLE);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            callBackPressed();
+                if (isRegisteredUserFound) {
+                    //user entered answer
+                    String answer = editViewForgotCredAnswer.getText().toString().trim();
+                    if (answer.isEmpty()) {
+                        MyUtils.showToast(this, "enter answer to revel the password");
+                        editViewForgotCredAnswer.setFocusable(true);
+                        editViewForgotCredAnswer.requestFocus();
+                    } else {
+                        //edit field to enter the security question answer
+                        //upon validating the answer for the selected user from the "user_profile" table
+                        // if answer matches, revel the password else
+                        // show toast message - "incorrect answer"
+
+                        //user selected user name
+                        String selectedUserName = spinnerForgotCredUserName.getSelectedItem().toString().trim();
+                        int registerUsersCount = allRegisteredUser.size();
+                        if (registerUsersCount != 0) {
+                            for (UserProfileModel currentRegisteredUser : allRegisteredUser) {
+                                String currentUserName = currentRegisteredUser.getUserName().trim();
+                                String currentAnswer = currentRegisteredUser.getAnswer().trim();
+                                if(selectedUserName.equals(currentUserName)){
+                                    if(answer.equals(currentAnswer)){
+                                        textViewRevelPassword.setText(currentRegisteredUser.getPassword());
+                                        textViewRevelPassword.setVisibility(View.VISIBLE);
+
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onBackPressed();
+                                            }
+                                        }, 1000);
+                                    }else{
+                                        MyUtils.showToast(this, "Answer does not match. Please try again");
+                                    }
+                                }
+                            }
                         }
-                    }, 1000);
-//--------------------------- pending -----------------------------------------------------//
+                    }
+                } else {
+                    onBackPressed();
                 }
                 break;
         }
-    }
-
-    public void callBackPressed() {
-        super.onBackPressed();
-
-        MyUtils.myPendingTransitionLeftInRightOut(this);
     }
 
     @Override

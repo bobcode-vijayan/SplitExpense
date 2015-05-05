@@ -34,9 +34,7 @@ public class GetContact {
 
     //place holder for contact name, phone number and thumbnail image
     private String name;
-    //private String phoneNumber;
     private Bitmap thumbnailSizedImage;
-
 
     public GetContact(Intent data, Context context) {
         this.data = data;
@@ -47,23 +45,17 @@ public class GetContact {
         return name;
     }
 
-//    public String getPhoneNumber() {
-//        return phoneNumber;
-//    }
-
     public Bitmap getThumbnailSizedImage() {
         return thumbnailSizedImage;
     }
 
     public void getContactDetails() {
-
         //once contact is selected, the contact app send back the data via intent
         //get the data from the intent which was returned by contact app
         Uri uri = data.getData();
 
         //Gets the decoded last segment in the path
         String contactID = uri.getLastPathSegment();
-
 
         //CONTENT_URI	The content:// style URI for all data records of the CONTENT_ITEM_TYPE MIME type,
         // combined with the associated raw contact and aggregate contact data.

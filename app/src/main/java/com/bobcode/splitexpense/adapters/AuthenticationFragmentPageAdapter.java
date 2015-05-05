@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.util.Log;
 
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.fragments.LoginFragment;
@@ -17,7 +16,7 @@ import com.bobcode.splitexpense.fragments.RegisterFragment;
 /**
  * Created by vijayananjalees on 4/2/15.
  */
-public class MyFragmentPageAdapter extends FragmentPagerAdapter {
+public class AuthenticationFragmentPageAdapter extends FragmentPagerAdapter {
 
     private Context context;
 
@@ -27,7 +26,7 @@ public class MyFragmentPageAdapter extends FragmentPagerAdapter {
 
     private int iconsResID[] = {R.drawable.ic_tab_login, R.drawable.ic_tab_register};
 
-    public MyFragmentPageAdapter(FragmentManager fm, Context content) {
+    public AuthenticationFragmentPageAdapter(FragmentManager fm, Context content) {
         super(fm);
         this.context = content;
     }
@@ -51,7 +50,6 @@ public class MyFragmentPageAdapter extends FragmentPagerAdapter {
         //return tabTitles[position];
         Drawable image = context.getResources().getDrawable(iconsResID[position]);
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
-        //SpannableString sb = new SpannableString(" " + tabTitles[position]);
         SpannableString sb = new SpannableString(" ");
         ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

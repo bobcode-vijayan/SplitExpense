@@ -25,9 +25,9 @@
                 android:id="@+id/imgViewMemberPhoto"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginLeft="16dp"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_image_holder" />
+                android:layout_marginLeft="16dp"
+                android:scaleType="fitXY" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
