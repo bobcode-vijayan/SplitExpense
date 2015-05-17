@@ -19,6 +19,7 @@ import com.bobcode.splitexpense.activities.AddOREditAccountActivity;
 import com.bobcode.splitexpense.activities.AddOREditEventActivity;
 import com.bobcode.splitexpense.activities.AllEventsActivity;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.models.AccountSummaryModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -193,7 +194,6 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
                     intentAddEventIcon.putExtra(Constants.ACCOUNT_CURRENCY, clickedAccountCurrency);
                     intentAddEventIcon.putExtra(Constants.ACCOUNT_MEMBERS, clickedAccountMembers);
                     context.startActivity(intentAddEventIcon);
-
                     break;
 
                 case R.id.imgAllEvents:
@@ -301,7 +301,23 @@ public class AccountSummaryAdapter extends RecyclerView.Adapter<AccountSummaryAd
 
         public void deleteAccountFromTable(String clickedAccountName) {
 //------------------------------- Pending -------------------------------------------------------
-            MyUtils.showToast(context, "account " + clickedAccountName + " deleted.......");
+            try{
+                SplitExpenseSQLiteHelper splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(context);
+                splitExpenseSQLiteHelper.deleteAnAccount(clickedAccountName);
+                MyUtils.showToast(context, "account (" + clickedAccountName + ") successfully");
+
+                Activity activity = (Activity) context;
+                TextView textViewErrorMessage = (TextView) activity.findViewById(R.id.textViewErrorMessage);
+                int totalAccounts = splitExpenseSQLiteHelper.getAccountProfileAccountCount();
+                if(totalAccounts == 0){
+                    textViewErrorMessage.setVisibility(View.VISIBLE);
+                    textViewErrorMessage.setText(R.string.no_member_exist);
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+                MyUtils.showToast(context, "error deleting (" + clickedAccountName +") account");
+            }
 
             remove(getPosition());
         }
