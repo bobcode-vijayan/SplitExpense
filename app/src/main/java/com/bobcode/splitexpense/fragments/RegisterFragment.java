@@ -1,7 +1,6 @@
 package com.bobcode.splitexpense.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,7 +16,7 @@ import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.helpers.DateAndTimeHelper;
 import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.interfaces.Communicator;
-import com.bobcode.splitexpense.models.UserProfileModel;
+import com.bobcode.splitexpense.models.UserProfileTableModel;
 import com.bobcode.splitexpense.utils.MySharedPrefs;
 import com.bobcode.splitexpense.utils.MyUtils;
 
@@ -173,8 +171,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     String todayDate = DateAndTimeHelper.getRawCurrentDate();
                     todayDate = todayDate.replace(" ", "-");
 
-                    UserProfileModel userProfileModel = new UserProfileModel(sSignUpUserName, sSignUpPassword, sSecurityAnswer, todayDate);
-                    splitExpenseSQLiteHelper.registerAUser(userProfileModel);
+                    UserProfileTableModel userProfileTableModel = new UserProfileTableModel(sSignUpUserName, sSignUpPassword, sSecurityAnswer, todayDate);
+                    splitExpenseSQLiteHelper.registerAUser(userProfileTableModel);
 
                     clearAllField();
 
@@ -207,7 +205,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
         switch (v.getId()) {
 
             case R.id.editTxtSignUpPassword:
-                showKeyboard(editTxtSignUpPassword);
+                MyUtils.showKeyboard(getActivity(), editTxtSignUpPassword);
 
                 if (sSignUpUserName.isEmpty()) {
                     MyUtils.showToast(getActivity(), "enter user name before password");
@@ -233,7 +231,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                     editTxtSignUpPassword.setFocusable(true);
                     editTxtSignUpPassword.requestFocus();
                 } else {
-                    showKeyboard(editTxtSignUpConfirmPassword);
+                    MyUtils.showKeyboard(getActivity(), editTxtSignUpConfirmPassword);
 
                     return false;
                 }
@@ -250,10 +248,5 @@ public class RegisterFragment extends Fragment implements View.OnClickListener, 
                 return true;
         }
         return false;
-    }
-
-    public final void showKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
     }
 }

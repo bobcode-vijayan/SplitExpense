@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
-import com.bobcode.splitexpense.models.UserProfileModel;
+import com.bobcode.splitexpense.models.UserProfileTableModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
 
     private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
 
-    private List<UserProfileModel> allRegisteredUser;
+    private List<UserProfileTableModel> allRegisteredUser;
 
     private boolean isRegisteredUserFound = false;
 
@@ -80,7 +80,7 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         fabtnForgotPassword.setOnClickListener(this);
 
         //populate spinner with all the registered user from "user_profile" table
-        allRegisteredUser = new ArrayList<UserProfileModel>();
+        allRegisteredUser = new ArrayList<UserProfileTableModel>();
         splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
         allRegisteredUser = splitExpenseSQLiteHelper.getAllRegisteredUser();
         List<String> userNames = new ArrayList<String>();
@@ -88,7 +88,7 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
         if (registerUsersCount != 0) {
             isRegisteredUserFound = true;
 
-            for (UserProfileModel currentRegisteredUser : allRegisteredUser) {
+            for (UserProfileTableModel currentRegisteredUser : allRegisteredUser) {
                 String currentUserName = currentRegisteredUser.getUserName().trim();
                 userNames.add(currentUserName);
             }
@@ -158,7 +158,7 @@ public class ForgotCredentialActivity extends ActionBarActivity implements View.
                         String selectedUserName = spinnerForgotCredUserName.getSelectedItem().toString().trim();
                         int registerUsersCount = allRegisteredUser.size();
                         if (registerUsersCount != 0) {
-                            for (UserProfileModel currentRegisteredUser : allRegisteredUser) {
+                            for (UserProfileTableModel currentRegisteredUser : allRegisteredUser) {
                                 String currentUserName = currentRegisteredUser.getUserName().trim();
                                 String currentAnswer = currentRegisteredUser.getAnswer().trim();
                                 if(selectedUserName.equals(currentUserName)){

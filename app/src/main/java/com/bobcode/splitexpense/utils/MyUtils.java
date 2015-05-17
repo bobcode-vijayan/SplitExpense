@@ -1,13 +1,16 @@
 package com.bobcode.splitexpense.utils;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
@@ -20,13 +23,14 @@ import com.bobcode.splitexpense.activities.AuthenticationViewPageFragementActivi
 import com.bobcode.splitexpense.constants.Constants;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 /**
  * Created by vijayananjalees on 4/15/15.
  */
 
-//public final class MyUtils extends Application {
-public final class MyUtils {
+public final class MyUtils extends Application {
+//public final class MyUtils {
 
     public static final boolean minCharCheck(String value, int minChar) {
 
@@ -107,16 +111,15 @@ public final class MyUtils {
     }
 
     //this function will dynamically load the check box for each mebers
-    public static CheckBox[] loadMembersCheckbox(GridLayout gridLayout, CheckBox[] checkBox, String[] members, Context context) {
-        //setting the layoutparam to arrange the members checkbox
+    public static final CheckBox[] loadMembersCheckbox(GridLayout gridLayout, CheckBox[] checkBox, List<String> members, Context context) {
+        //setting the layout-param to arrange the members checkbox
         RelativeLayout.LayoutParams chkBoxParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 130);
 
-        int totalMembers = members.length;
-
+        int totalMembers = members.size();
         checkBox = new CheckBox[totalMembers];
         for (int index = 0; index < totalMembers; index++) {
             checkBox[index] = new CheckBox(context);
-            checkBox[index].setText(members[index]);
+            checkBox[index].setText(members.get(index));
             checkBox[index].setId(index);
             checkBox[index].setLayoutParams(chkBoxParams);
             checkBox[index].setTextColor(context.getResources().getColor(R.color.primary_text));
@@ -145,4 +148,8 @@ public final class MyUtils {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
+    public static void showKeyboard(Activity activity, View v) {
+        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+    }
 }

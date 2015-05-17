@@ -3,6 +3,7 @@ package com.bobcode.splitexpense.activities;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +20,14 @@ import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.helpers.ChooseCategoryDialogFragment;
 import com.bobcode.splitexpense.helpers.DateAndTimeHelper;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class AddOREditEventActivity extends ActionBarActivity implements View.OnClickListener, OnDateSetListener {
@@ -58,9 +61,11 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
 
     private CheckBox[] checkBox;
 
-    private String[] accountMembersList;
+    private String[] accountMembersArray;
 
     private String from;
+
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,14 +160,25 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
 //        checkBox = MyUtils.loadMembersCheckbox(gridLayoutAEEMember, checkBox, members, this);
 ////**************************************** Dynamically add check box for members ***************************
             //pre-selected the members from the selected account information
-            accountMembersList = accountMembers.split(",");
-            int totalMembers = (int) accountMembersList.length;
+            if(accountMembers.contains(",")){
+                Log.d("vijayan", "does contain ,");
+                accountMembersArray = accountMembers.split(",");
+            }else{
+                Log.d("vijayan", "does not contain ,");
+                accountMembersArray = new String[1];
+                accountMembersArray[0] = accountMembers;
+            }
+
+            List<String> accountMembersList = Arrays.asList(accountMembersArray);
+            int totalMembers = (int) accountMembersArray.length;
             int noOfRows = 0;
             if ((totalMembers) % 2 >= 1) {
                 noOfRows = (totalMembers / 2) + 1;
             } else {
                 noOfRows = (totalMembers / 2);
             }
+            Log.d("vijayan", "noOfRows :  " + noOfRows);
+
             gridLayoutAEEMember.setRowCount(noOfRows);
             gridLayoutAEEMember.setColumnCount(2);
             checkBox = MyUtils.loadMembersCheckbox(gridLayoutAEEMember, checkBox, accountMembersList, this);
@@ -226,9 +242,21 @@ public class AddOREditEventActivity extends ActionBarActivity implements View.On
     }
 
     public void selectCheckBox(String membersToSelect) {
-        String[] membersToSelectList = membersToSelect.split(",");
+        //String[] membersToSelectList = membersToSelect.split(",");
+        String[] membersToSelectList;
+        //vijayan
+        if(membersToSelect.contains(",")){
+            Log.d("vijayan", "does contain ,");
+            membersToSelectList = membersToSelect.split(",");
+        }else{
+            Log.d("vijayan", "does not contain ,");
+            membersToSelectList = new String[1];
+            membersToSelectList[0] = membersToSelect;
+        }
+
         for (int indexAccountMembers = 0; indexAccountMembers < membersToSelectList.length; indexAccountMembers++) {
             String memberTemp = membersToSelectList[indexAccountMembers].trim().toLowerCase();
+
             for (int indexCheckBox = 0; indexCheckBox < checkBox.length; indexCheckBox++) {
                 String checkBoxMemberName = checkBox[indexCheckBox].getText().toString().trim().toLowerCase();
                 if (checkBoxMemberName.equals(memberTemp)) {

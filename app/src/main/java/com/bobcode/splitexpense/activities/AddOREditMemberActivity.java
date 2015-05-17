@@ -19,7 +19,7 @@ import com.bobcode.splitexpense.helpers.DateAndTimeHelper;
 import com.bobcode.splitexpense.helpers.GetContact;
 import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.models.MemberDetailModel;
-import com.bobcode.splitexpense.models.MemberProfileModel;
+import com.bobcode.splitexpense.models.MemberProfileTableModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -48,7 +48,7 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
     private String memeberNameToEdit;
 
     private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
-    private List<MemberProfileModel> allAddedMembersList;
+    private List<MemberProfileTableModel> allAddedMembersList;
     private List<MemberDetailModel> memberDetailModelList;
 
     @Override
@@ -198,7 +198,7 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
                 String name = editTextMemberName.getText().toString().trim();
                 allAddedMembersList = splitExpenseSQLiteHelper.getAllMembers();
                 memberDetailModelList = new ArrayList<>();
-                for (MemberProfileModel currentMemberDetail : allAddedMembersList) {
+                for (MemberProfileTableModel currentMemberDetail : allAddedMembersList) {
                     String currentName = currentMemberDetail.getName().trim();
                     if (currentName.equals(name)) {
                         MyUtils.showToast(this, "member already exits");
@@ -215,8 +215,8 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
                 String todayDate = DateAndTimeHelper.getRawCurrentDate();
                 todayDate = todayDate.replace(" ", "-");
 
-                MemberProfileModel memberProfileModel = new MemberProfileModel(photo, name, displayName, comments, todayDate, todayDate);
-                splitExpenseSQLiteHelper.addAMember(memberProfileModel);
+                MemberProfileTableModel memberProfileTableModel = new MemberProfileTableModel(photo, name, displayName, comments, todayDate, todayDate);
+                splitExpenseSQLiteHelper.addAMember(memberProfileTableModel);
 
                 MyUtils.showToast(this, "member added successfully");
 
@@ -248,7 +248,7 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
             String name = editTextMemberName.getText().toString().trim();
             allAddedMembersList = splitExpenseSQLiteHelper.getAllMembers();
             memberDetailModelList = new ArrayList<>();
-            for (MemberProfileModel currentMemberDetail : allAddedMembersList) {
+            for (MemberProfileTableModel currentMemberDetail : allAddedMembersList) {
                 String currentName = currentMemberDetail.getName().trim();
                 if (currentName.equals(name)) {
                     MyUtils.showToast(this, "member already exits");
@@ -267,8 +267,8 @@ public class AddOREditMemberActivity extends ActionBarActivity implements View.O
             String todayDate = DateAndTimeHelper.getRawCurrentDate();
             todayDate = todayDate.replace(" ", "-");
 
-            MemberProfileModel memberProfileModel = new MemberProfileModel(photo, name, displayName, comments, todayDate);
-            splitExpenseSQLiteHelper.updateAMember(memeberNameToEdit, memberProfileModel);
+            MemberProfileTableModel memberProfileTableModel = new MemberProfileTableModel(photo, name, displayName, comments, todayDate);
+            splitExpenseSQLiteHelper.updateAMember(memeberNameToEdit, memberProfileTableModel);
 
             MyUtils.showToast(this, "member updated successfully");
 

@@ -12,6 +12,8 @@ public class MySharedPrefs {
     public static final String PREFS_KEY_FOR_REMEMBER_ME = "REMEMBER_ME";
     public static final String PREFS_KEY_FOR_AEE_CATEGORY = "AEE_CATEGORY";
 
+    public static final String PREFS_KEY_FOR_ADD_ACCOUNT_DESCRIPTION = "ADD_ACCOUNT_DESCRIPTION";
+
     Context context;
 
     private SharedPreferences sharedPreferences;

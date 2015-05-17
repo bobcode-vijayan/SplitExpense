@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by vijayananjalees on 5/2/15.
  */
-public class MemberProfileModel {
+public class MemberProfileTableModel {
 
     private Bitmap photo;
     private String name;
@@ -14,7 +14,7 @@ public class MemberProfileModel {
     private String createdOn;
     private String lastModified;
 
-    public MemberProfileModel(Bitmap photo, String name, String displayName, String comments, String lastModified) {
+    public MemberProfileTableModel(Bitmap photo, String name, String displayName, String comments, String lastModified) {
         this.photo = photo;
         this.name = name;
         this.displayName = displayName;
@@ -22,12 +22,12 @@ public class MemberProfileModel {
         this.lastModified = lastModified;
     }
 
-    public MemberProfileModel(Bitmap photo,
-                              String name,
-                              String displayName,
-                              String comments,
-                              String createdOn,
-                              String lastModified) {
+    public MemberProfileTableModel(Bitmap photo,
+                                   String name,
+                                   String displayName,
+                                   String comments,
+                                   String createdOn,
+                                   String lastModified) {
         this.photo = photo;
         this.name = name;
         this.displayName = displayName;

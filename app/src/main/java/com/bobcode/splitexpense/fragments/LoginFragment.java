@@ -1,6 +1,5 @@
 package com.bobcode.splitexpense.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,7 +18,7 @@ import com.bobcode.splitexpense.activities.AllAccountsActivity;
 import com.bobcode.splitexpense.activities.ForgotCredentialActivity;
 import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
-import com.bobcode.splitexpense.models.UserProfileModel;
+import com.bobcode.splitexpense.models.UserProfileTableModel;
 import com.bobcode.splitexpense.utils.MySharedPrefs;
 import com.bobcode.splitexpense.utils.MyUtils;
 
@@ -54,7 +52,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
     private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
 
-    private List<UserProfileModel> allRegisteredUser;
+    private List<UserProfileTableModel> allRegisteredUser;
 
     public static LoginFragment newInstance(int pageNumber, String pageName) {
         LoginFragment loginFragment = new LoginFragment();
@@ -171,7 +169,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                     //if no registered user found, show toast message and take the user to registration page
                     //Else validate against entered user name and password and action based on validation
                     //strSignUpUserName.equals(username-"user_profile") && strSignUpPassword.equals(password-"user_profile")
-                    allRegisteredUser = new ArrayList<UserProfileModel>();
+                    allRegisteredUser = new ArrayList<UserProfileTableModel>();
                     allRegisteredUser = splitExpenseSQLiteHelper.getAllRegisteredUser();
                     int registerUsersCount = allRegisteredUser.size();
                     if (registerUsersCount == 0) {
@@ -187,7 +185,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
                         viewPager.setCurrentItem(1);
                         return;
                     } else {
-                        for (UserProfileModel currentRegisteredUser : allRegisteredUser) {
+                        for (UserProfileTableModel currentRegisteredUser : allRegisteredUser) {
                             String currentUserName = currentRegisteredUser.getUserName().trim();
                             String currentPassword = currentRegisteredUser.getPassword().trim();
                             if ((strLoginUserName.equals(currentUserName)) && (strLoginPassword.equals(currentPassword))) {
@@ -233,7 +231,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
 
         switch (v.getId()) {
             case R.id.editTxtLoginPassword:
-                showKeyboard(editTxtLoginPassword);
+                MyUtils.showKeyboard(getActivity(), editTxtLoginPassword);
 
                 //read the user input
                 String strSignUpUserName = editTxtLoginUserName.getText().toString().trim();
@@ -252,10 +250,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Vie
         }
 
         return true;
-    }
-
-    public final void showKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
     }
 }

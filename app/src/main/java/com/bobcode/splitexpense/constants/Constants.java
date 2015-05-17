@@ -16,6 +16,9 @@ public final class Constants {
     public static final int PASSWORD_MIN_LENGTH = 6;
     public static final int PASSWORD_MAX_LENGTH = 20;
 
+    public static final int ACCOUNT_NAME_MIN_LENGTH = 6;
+    public static final int ACCOUNT_DESCRIPTION_MIN_LENGTH = 6;
+
     public static final String ACCOUNT_ACTION = "com.bobcode.splitexpense.ACCOUNT_ACTION";
     public static final String ADD_ACCOUNT_ACTION_SOURCE = "com.bobcode.splitexpense.ADD_ACCOUNT_ACTION_SOURCE";
     public static final String EDIT_ACCOUNT_ACTION_SOURCE = "com.bobcode.splitexpense.EDIT_ACCOUNT_ACTION_SOURCE";

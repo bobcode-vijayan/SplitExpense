@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bobcode.splitexpense.R;
 import com.bobcode.splitexpense.adapters.AccountSummaryAdapter;
 import com.bobcode.splitexpense.constants.Constants;
+import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.models.AccountSummaryModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -32,11 +33,16 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
 
     private List<AccountSummaryModel> accountSummaryModelList;
 
-    private TextView textViewNoAccountExists;
+    private TextView textViewErrorMessage;
 
     private FloatingActionButton fabtnAddAccount;
 
     private boolean isMemberExists;
+    private boolean isAccountExits;
+
+    private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
+
+    private Menu myMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,7 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
 
         //This is to display no account exists message if no account exits
         //when user navigate to all account page
-        textViewNoAccountExists = (TextView) findViewById(R.id.textViewNoAccountExists);
+        textViewErrorMessage = (TextView) findViewById(R.id.textViewErrorMessage);
 
         //floating action button to add an account
         fabtnAddAccount = (FloatingActionButton) findViewById(R.id.fabtnAllAccounts);
@@ -67,52 +73,79 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewAllAccounts.setLayoutManager(linearLayoutManager);
 
-//------------------------------- Pending -------------------------------------------------------
+//************************ Recycler view to display all the available account ****************************
+        //This is to populated all available accounts in the app
+        populateAccounts();
+
+        fabtnAddAccount.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        //This is to populated all available accounts in the app
+        populateAccounts();
+    }
+
+    //This function is to populated all available accounts in the app
+    public void populateAccounts(){
         //               validation - I
         //validate if any members exists in "member_profile"
-        //if no member exists display a message to user to add a member before creating an account
-        //          update isMemberExits to false
-        //else if member exists, move to validation-II
-        //          update isMemberExits to true
-        isMemberExists = true;
+        //if no member exists make add a account menu item invisible and display a message to
+        //user to add a member before creating an account update isMemberExits to false
+        //else if member exists, make add a account menu item visible  and
+        //move to validation-II update isMemberExits to true
+
+        //validate if any member exits in "members profile" table
+        //if any member exits display all the members details from the table
+        //else display the text message to the user to create an member to begin with
+        splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
+        int totalMembers = splitExpenseSQLiteHelper.getMembersCount();
+        if(totalMembers >=1){
+            isMemberExists = true;
+            if(myMenu != null){
+                myMenu.findItem(R.id.action_add_account).setVisible(true);
+            }
+        }else if(totalMembers == 0){
+            isMemberExists = false;
+            if(myMenu != null){
+                myMenu.findItem(R.id.action_add_account).setVisible(false);
+            }
+        }
+
         if (isMemberExists == false) {
-            textViewNoAccountExists.setText(R.string.no_member_exist);
-            textViewNoAccountExists.setVisibility(View.VISIBLE);
+            textViewErrorMessage.setText(R.string.no_member_exist);
+            textViewErrorMessage.setVisibility(View.VISIBLE);
+            recyclerViewAllAccounts.setVisibility(View.INVISIBLE);
         } else {
             //               validation - II
             //validate if any account exits in "account_profile" table
-            //if any account exits display all the accounts details from the table
-            //          update isAccountExits to true
-            //else display the text message to the user to create an account to begin with
-            //          update isAccountExits to false
-            boolean isAccountExits = true;
+            //if any account exits display all the accounts details from the table and update isAccountExits to true
+            //else display the appropriate text message(toast) to user and update isAccountExits to false
+
+            recyclerViewAllAccounts.setVisibility(View.VISIBLE);
+
+            splitExpenseSQLiteHelper = new SplitExpenseSQLiteHelper(this);
+            int totalAccounts = splitExpenseSQLiteHelper.getAccountProfileAccountCount();
+            if(totalAccounts >= 1){
+                isAccountExits = true;
+                textViewErrorMessage.setVisibility(View.INVISIBLE);
+            }else if(totalAccounts == 0){
+                isAccountExits = false;
+                textViewErrorMessage.setVisibility(View.VISIBLE);
+            }
             if (isAccountExits) {
-                //Data
-                AccountSummaryModel febAccount = new AccountSummaryModel("Feb 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmugam", "Feb Room monthly expense", "Sunday, Feb 01 2015", 109, 810.00f, "Settled", "US Dollar");
-                AccountSummaryModel marchAccount = new AccountSummaryModel("March 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "March Room monthly expense", "Monday, March 02 2015", 87, 620.00f, "Pending", "US Dollar");
-                AccountSummaryModel aprilAccount = new AccountSummaryModel("April 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "April Room monthly expense", "Tuesday, April 02 2015", 139, 1893.29f, "Active", "Indian Rupee");
-                AccountSummaryModel mayAccount = new AccountSummaryModel("May 2015", "Vijayan, Senthil, Amitesh, Venky, Vijay Sridhar, Shanmuga, Arun", "May Room monthly expense", "Wednesday, May 02 2015", 10, 210.00f, "Active", "British Pound");
-                AccountSummaryModel AugustAccount = new AccountSummaryModel("August 2015", "Vijayan, Senthil, Amitesh", "August Room monthly expense", "Wednesday, August 02 2015", 10, 210.00f, "Active", "British Pound");
-
+                //Data (get all the account details from database)
                 accountSummaryModelList = new ArrayList<>();
-                accountSummaryModelList.add(febAccount);
-                accountSummaryModelList.add(marchAccount);
-                accountSummaryModelList.add(aprilAccount);
-                accountSummaryModelList.add(mayAccount);
-                accountSummaryModelList.add(AugustAccount);
-
+                accountSummaryModelList = splitExpenseSQLiteHelper.getAllAccounts();
                 AccountSummaryAdapter accountSummaryAdapter = new AccountSummaryAdapter(this, (ArrayList) accountSummaryModelList);
 
                 recyclerViewAllAccounts.setAdapter(accountSummaryAdapter);
             } else {
-                textViewNoAccountExists.setText(R.string.no_account_exist);
-                textViewNoAccountExists.setVisibility(View.VISIBLE);
+                textViewErrorMessage.setText(R.string.no_account_exist);
             }
         }
-//------------------------------- Pending -------------------------------------------------------
-//************************ Recycler view to display all the available account ****************************
-
-        fabtnAddAccount.setOnClickListener(this);
     }
 
     @Override
@@ -122,6 +155,7 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
                 if (isMemberExists == false) {
                     //fabtnAllAccounts button should call the add member activity while clicked
                     Intent intentAddMember = new Intent(this, AddOREditMemberActivity.class);
+                    intentAddMember.putExtra(Constants.MEMBER_ACTION, "Add");
                     startActivity(intentAddMember);
                 } else {
                     //fabtnAllAccounts button should call the add account activity while clicked
@@ -141,6 +175,14 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_all_accounts, menu);
+        myMenu = menu;
+
+        if (isMemberExists == false) {
+            //menu.findItem(R.id.action_add_account).setEnabled(false);
+            menu.findItem(R.id.action_add_account).setVisible(false);
+        }else{
+            menu.findItem(R.id.action_add_account).setVisible(true);
+        }
         return true;
     }
 
@@ -154,6 +196,7 @@ public class AllAccountsActivity extends ActionBarActivity implements View.OnCli
             case R.id.action_report:
                 Intent intentReport = new Intent(this, PayoutActivity.class);
                 startActivity(intentReport);
+                MyUtils.myPendingTransitionRightInLeftOut(this);
 
                 break;
 

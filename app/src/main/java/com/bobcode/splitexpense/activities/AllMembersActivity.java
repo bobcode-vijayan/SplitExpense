@@ -17,7 +17,7 @@ import com.bobcode.splitexpense.adapters.MembersDetailsAdapter;
 import com.bobcode.splitexpense.constants.Constants;
 import com.bobcode.splitexpense.helpers.SplitExpenseSQLiteHelper;
 import com.bobcode.splitexpense.models.MemberDetailModel;
-import com.bobcode.splitexpense.models.MemberProfileModel;
+import com.bobcode.splitexpense.models.MemberProfileTableModel;
 import com.bobcode.splitexpense.utils.MyUtils;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -39,7 +39,7 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
 
     private SplitExpenseSQLiteHelper splitExpenseSQLiteHelper;
 
-    private List<MemberProfileModel> allAddedMembersList;
+    private List<MemberProfileTableModel> allAddedMembersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class AllMembersActivity extends ActionBarActivity implements View.OnClic
         if(totalMembers >=1){
             allAddedMembersList = splitExpenseSQLiteHelper.getAllMembers();
             memberDetailModelList = new ArrayList<>();
-            for (MemberProfileModel currentMemberDetail : allAddedMembersList) {
+            for (MemberProfileTableModel currentMemberDetail : allAddedMembersList) {
                 Bitmap photo = currentMemberDetail.getPhoto();
                 String currentName = currentMemberDetail.getName().trim();
                 String currentDisplayName = currentMemberDetail.getDisplayName().trim();
